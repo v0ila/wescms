@@ -1,8 +1,7 @@
 {
-    "name": "pagekit/pagekit",
-    "type": "project",
-    "description": "The Pagekit CMS",
-    "keywords": ["cms", "pagekit"],
+    "name": "pagekit/framework",
+    "description": "The Pagekit Framework",
+    "keywords": ["framework", "pagekit"],
     "homepage": "http://pagekit.com",
     "license": "MIT",
     "authors": [
@@ -12,11 +11,30 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "pagekit/framework": "0.9.*@dev",
-        "pagekit/razr": "0.9.*@dev",
-        "lusitanian/oauth": "0.1.*@dev",
-        "mibe/feedwriter": "1.*",
-        "nikic/php-parser": "1.*"
+        "doctrine/annotations": "1.*, >=1.2.1",
+        "doctrine/dbal": "2.4.*",
+        "guzzlehttp/guzzle": "4.*",
+        "ircmaxell/password-compat": "1.0.*",
+        "ircmaxell/random-lib": "1.0.*",
+        "pimple/pimple": "2.0.*",
+        "swiftmailer/swiftmailer": "5.*",
+        "symfony/console": "2.5.*",
+        "symfony/finder": "2.5.*",
+        "symfony/http-foundation": "2.5.*",
+        "symfony/http-kernel": "2.5.*",
+        "symfony/routing": "2.5.*",
+        "symfony/stopwatch": "2.5.*",
+        "symfony/templating": "2.5.*",
+        "symfony/translation": "2.5.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pagekit\\": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.9-dev"
+        }
     }
 }
