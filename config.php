@@ -6,7 +6,7 @@
     array (
       'mysql' => 
       array (
-        'host' => 'localhost',
+        'host' => 'wescms.herokuapp.com',
         'user' => 'root',
         'password' => '',
         'dbname' => 'wescms',
