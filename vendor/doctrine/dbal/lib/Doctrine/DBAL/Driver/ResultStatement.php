@@ -45,27 +45,22 @@ interface ResultStatement extends \Traversable
     /**
      * Sets the fetch mode to use while iterating this statement.
      *
-     * @param integer $fetchMode The fetch mode must be one of the PDO::FETCH_* constants.
+     * @param integer $fetchMode
      * @param mixed   $arg2
      * @param mixed   $arg3
      *
      * @return boolean
-     *
-     * @see PDO::FETCH_* constants.
      */
     public function setFetchMode($fetchMode, $arg2 = null, $arg3 = null);
 
     /**
-     * Returns the next row of a result set.
+     * @see Query::HYDRATE_* constants
      *
      * @param integer|null $fetchMode Controls how the next row will be returned to the caller.
-     *                                The value must be one of the PDO::FETCH_* constants,
-     *                                defaulting to PDO::FETCH_BOTH.
+     *                                This value must be one of the Query::HYDRATE_* constants,
+     *                                defaulting to Query::HYDRATE_BOTH
      *
-     * @return mixed The return value of this method on success depends on the fetch mode. In all cases, FALSE is
-     *               returned on failure.
-     *
-     * @see PDO::FETCH_* constants.
+     * @return mixed
      */
     public function fetch($fetchMode = null);
 
@@ -73,12 +68,10 @@ interface ResultStatement extends \Traversable
      * Returns an array containing all of the result set rows.
      *
      * @param integer|null $fetchMode Controls how the next row will be returned to the caller.
-     *                                The value must be one of the PDO::FETCH_* constants,
-     *                                defaulting to PDO::FETCH_BOTH.
+     *                                This value must be one of the Query::HYDRATE_* constants,
+     *                                defaulting to Query::HYDRATE_BOTH
      *
      * @return array
-     *
-     * @see PDO::FETCH_* constants.
      */
     public function fetchAll($fetchMode = null);
 

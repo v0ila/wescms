@@ -15,9 +15,6 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Matcher\ApacheUrlMatcher;
 
-/**
- * @group legacy
- */
 class LegacyApacheUrlMatcherTest extends \PHPUnit_Framework_TestCase
 {
     protected $server;

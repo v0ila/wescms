@@ -25,7 +25,7 @@ use Doctrine\DBAL\Types\Type;
 /**
  * SQL Server Schema Manager.
  *
- * @license http://www.opensource.org/licenses/mit-license.php MIT
+ * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @author  Konsta Vesterinen <kvesteri@cc.hut.fi>
  * @author  Lukas Smith <smith@pooteeweet.org> (PEAR MDB2 library)
  * @author  Juozas Kaziukenas <juozas@juokaz.com>
@@ -79,31 +79,34 @@ class SQLServerSchemaManager extends AbstractSchemaManager
                 break;
         }
 
-        if ('char' === $dbType || 'nchar' === $dbType || 'binary' === $dbType) {
-            $fixed = true;
+        $type = $this->_platform->getDoctrineTypeMapping($dbType);
+
+        switch ($type) {
+            case 'char':
+                $fixed = true;
+                break;
+            case 'text':
+                $fixed = false;
+                break;
         }
 
-        $type                   = $this->_platform->getDoctrineTypeMapping($dbType);
-        $type                   = $this->extractDoctrineTypeFromComment($tableColumn['comment'], $type);
-        $tableColumn['comment'] = $this->removeDoctrineTypeFromComment($tableColumn['comment'], $type);
-
         $options = array(
-            'length'        => ($length == 0 || !in_array($type, array('text', 'string'))) ? null : $length,
-            'unsigned'      => false,
-            'fixed'         => (bool) $fixed,
-            'default'       => $default !== 'NULL' ? $default : null,
-            'notnull'       => (bool) $tableColumn['notnull'],
-            'scale'         => $tableColumn['scale'],
-            'precision'     => $tableColumn['precision'],
+            'length' => ($length == 0 || !in_array($type, array('text', 'string'))) ? null : $length,
+            'unsigned' => false,
+            'fixed' => (bool) $fixed,
+            'default' => $default !== 'NULL' ? $default : null,
+            'notnull' => (bool) $tableColumn['notnull'],
+            'scale' => $tableColumn['scale'],
+            'precision' => $tableColumn['precision'],
             'autoincrement' => (bool) $tableColumn['autoincrement'],
-            'comment'       => $tableColumn['comment'] !== '' ? $tableColumn['comment'] : null,
+        );
+
+        $platformOptions = array(
+            'collate' => $tableColumn['collation'] == 'NULL' ? null : $tableColumn['collation']
         );
 
         $column = new Column($tableColumn['name'], Type::getType($type), $options);
-
-        if (isset($tableColumn['collation']) && $tableColumn['collation'] !== 'NULL') {
-            $column->setPlatformOption('collation', $tableColumn['collation']);
-        }
+        $column->setPlatformOptions($platformOptions);
 
         return $column;
     }
@@ -183,14 +186,6 @@ class SQLServerSchemaManager extends AbstractSchemaManager
     /**
      * {@inheritdoc}
      */
-    protected function getPortableNamespaceDefinition(array $namespace)
-    {
-        return $namespace['name'];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function _getPortableViewDefinition($view)
     {
         // @todo
@@ -206,13 +201,13 @@ class SQLServerSchemaManager extends AbstractSchemaManager
 
         try {
             $tableIndexes = $this->_conn->fetchAll($sql);
-        } catch (\PDOException $e) {
+        } catch(\PDOException $e) {
             if ($e->getCode() == "IMSSP") {
                 return array();
             } else {
                 throw $e;
             }
-        } catch (SQLSrvException $e) {
+        } catch(SQLSrvException $e) {
             if (strpos($e->getMessage(), 'SQLSTATE [01000, 15472]') === 0) {
                 return array();
             } else {
@@ -228,8 +223,8 @@ class SQLServerSchemaManager extends AbstractSchemaManager
      */
     public function alterTable(TableDiff $tableDiff)
     {
-        if (count($tableDiff->removedColumns) > 0) {
-            foreach ($tableDiff->removedColumns as $col) {
+        if(count($tableDiff->removedColumns) > 0) {
+            foreach($tableDiff->removedColumns as $col){
                 $columnConstraintSql = $this->getColumnConstraintSQL($tableDiff->name, $col->getName());
                 foreach ($this->_conn->fetchAll($columnConstraintSql) as $constraint) {
                     $this->_conn->exec("ALTER TABLE $tableDiff->name DROP CONSTRAINT " . $constraint['Name']);

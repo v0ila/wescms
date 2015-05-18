@@ -50,7 +50,6 @@ class VarDateTimeType extends DateTimeType
         if ( ! $val) {
             throw ConversionException::conversionFailed($value, $this->getName());
         }
-
         return $val;
     }
 }

@@ -208,7 +208,7 @@ class QuestionHelperTest extends \PHPUnit_Framework_TestCase
     protected function getInputStream($input)
     {
         $stream = fopen('php://memory', 'r+', false);
-        fwrite($stream, $input);
+        fputs($stream, $input);
         rewind($stream);
 
         return $stream;

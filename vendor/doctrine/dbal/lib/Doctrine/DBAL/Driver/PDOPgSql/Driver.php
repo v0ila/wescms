@@ -19,44 +19,26 @@
 
 namespace Doctrine\DBAL\Driver\PDOPgSql;
 
-use Doctrine\DBAL\Driver\AbstractPostgreSQLDriver;
-use Doctrine\DBAL\Driver\PDOConnection;
-use Doctrine\DBAL\DBALException;
-use PDOException;
-use PDO;
+use Doctrine\DBAL\Platforms;
 
 /**
  * Driver that connects through pdo_pgsql.
  *
  * @since 2.0
  */
-class Driver extends AbstractPostgreSQLDriver
+class Driver implements \Doctrine\DBAL\Driver
 {
     /**
      * {@inheritdoc}
      */
     public function connect(array $params, $username = null, $password = null, array $driverOptions = array())
     {
-        try {
-            $pdo = new PDOConnection(
-                $this->_constructPdoDsn($params),
-                $username,
-                $password,
-                $driverOptions
-            );
-
-            if (PHP_VERSION_ID >= 50600
-                && (! isset($driverOptions[PDO::PGSQL_ATTR_DISABLE_PREPARES])
-                    || true === $driverOptions[PDO::PGSQL_ATTR_DISABLE_PREPARES]
-                )
-            ) {
-                $pdo->setAttribute(PDO::PGSQL_ATTR_DISABLE_PREPARES, true);
-            }
-
-            return $pdo;
-        } catch (PDOException $e) {
-            throw DBALException::driverException($this, $e);
-        }
+        return new \Doctrine\DBAL\Driver\PDOConnection(
+            $this->_constructPdoDsn($params),
+            $username,
+            $password,
+            $driverOptions
+        );
     }
 
     /**
@@ -69,28 +51,33 @@ class Driver extends AbstractPostgreSQLDriver
     private function _constructPdoDsn(array $params)
     {
         $dsn = 'pgsql:';
-
         if (isset($params['host']) && $params['host'] != '') {
             $dsn .= 'host=' . $params['host'] . ' ';
         }
-
         if (isset($params['port']) && $params['port'] != '') {
             $dsn .= 'port=' . $params['port'] . ' ';
         }
-
         if (isset($params['dbname'])) {
             $dsn .= 'dbname=' . $params['dbname'] . ' ';
         }
 
-        if (isset($params['charset'])) {
-            $dsn .= "options='--client_encoding=" . $params['charset'] . "'";
-        }
-
-        if (isset($params['sslmode'])) {
-            $dsn .= 'sslmode=' . $params['sslmode'] . ' ';
-        }
-
         return $dsn;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDatabasePlatform()
+    {
+        return new \Doctrine\DBAL\Platforms\PostgreSqlPlatform();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSchemaManager(\Doctrine\DBAL\Connection $conn)
+    {
+        return new \Doctrine\DBAL\Schema\PostgreSqlSchemaManager($conn);
     }
 
     /**
@@ -100,4 +87,17 @@ class Driver extends AbstractPostgreSQLDriver
     {
         return 'pdo_pgsql';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDatabase(\Doctrine\DBAL\Connection $conn)
+    {
+        $params = $conn->getParams();
+
+        return (isset($params['dbname']))
+            ? $params['dbname']
+            : $conn->query('SELECT CURRENT_DATABASE()')->fetchColumn();
+    }
 }
+

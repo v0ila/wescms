@@ -38,7 +38,7 @@ class FlashBagTest extends \PHPUnit_Framework_TestCase
         $this->bag->initialize($this->array);
     }
 
-    protected function tearDown()
+    public function tearDown()
     {
         $this->bag = null;
         parent::tearDown();

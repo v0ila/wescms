@@ -22,7 +22,7 @@ class RouterListenerTest extends \PHPUnit_Framework_TestCase
 {
     private $requestStack;
 
-    protected function setUp()
+    public function setUp()
     {
         $this->requestStack = $this->getMock('Symfony\Component\HttpFoundation\RequestStack', array(), array(), '', false);
     }

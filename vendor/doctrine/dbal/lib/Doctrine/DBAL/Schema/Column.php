@@ -20,6 +20,7 @@
 namespace Doctrine\DBAL\Schema;
 
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Schema\Visitor\Visitor;
 
 /**
  * Object representation of a database column.
@@ -31,7 +32,7 @@ use Doctrine\DBAL\Types\Type;
 class Column extends AbstractAsset
 {
     /**
-     * @var Type
+     * @var \Doctrine\DBAL\Types\Type
      */
     protected $_type;
 
@@ -98,9 +99,9 @@ class Column extends AbstractAsset
     /**
      * Creates a new Column.
      *
-     * @param string $columnName
-     * @param Type   $type
-     * @param array  $options
+     * @param string                    $columnName
+     * @param \Doctrine\DBAL\Types\Type $type
+     * @param array                     $options
      */
     public function __construct($columnName, Type $type, array $options=array())
     {
@@ -112,7 +113,7 @@ class Column extends AbstractAsset
     /**
      * @param array $options
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setOptions(array $options)
     {
@@ -127,26 +128,25 @@ class Column extends AbstractAsset
     }
 
     /**
-     * @param Type $type
+     * @param \Doctrine\DBAL\Types\Type $type
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setType(Type $type)
     {
         $this->_type = $type;
-
         return $this;
     }
 
     /**
      * @param integer|null $length
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setLength($length)
     {
-        if ($length !== null) {
-            $this->_length = (int) $length;
+        if($length !== null) {
+            $this->_length = (int)$length;
         } else {
             $this->_length = null;
         }
@@ -157,7 +157,7 @@ class Column extends AbstractAsset
     /**
      * @param integer $precision
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setPrecision($precision)
     {
@@ -165,7 +165,7 @@ class Column extends AbstractAsset
             $precision = 10; // defaults to 10 when no valid precision is given.
         }
 
-        $this->_precision = (int) $precision;
+        $this->_precision = (int)$precision;
 
         return $this;
     }
@@ -173,7 +173,7 @@ class Column extends AbstractAsset
     /**
      * @param integer $scale
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setScale($scale)
     {
@@ -181,7 +181,7 @@ class Column extends AbstractAsset
             $scale = 0;
         }
 
-        $this->_scale = (int) $scale;
+        $this->_scale = (int)$scale;
 
         return $this;
     }
@@ -189,11 +189,11 @@ class Column extends AbstractAsset
     /**
      * @param boolean $unsigned
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setUnsigned($unsigned)
     {
-        $this->_unsigned = (bool) $unsigned;
+        $this->_unsigned = (bool)$unsigned;
 
         return $this;
     }
@@ -201,11 +201,11 @@ class Column extends AbstractAsset
     /**
      * @param boolean $fixed
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setFixed($fixed)
     {
-        $this->_fixed = (bool) $fixed;
+        $this->_fixed = (bool)$fixed;
 
         return $this;
     }
@@ -213,11 +213,11 @@ class Column extends AbstractAsset
     /**
      * @param boolean $notnull
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setNotnull($notnull)
     {
-        $this->_notnull = (bool) $notnull;
+        $this->_notnull = (bool)$notnull;
 
         return $this;
     }
@@ -225,7 +225,7 @@ class Column extends AbstractAsset
     /**
      * @param mixed $default
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setDefault($default)
     {
@@ -237,7 +237,7 @@ class Column extends AbstractAsset
     /**
      * @param array $platformOptions
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setPlatformOptions(array $platformOptions)
     {
@@ -250,7 +250,7 @@ class Column extends AbstractAsset
      * @param string $name
      * @param mixed  $value
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setPlatformOption($name, $value)
     {
@@ -262,7 +262,7 @@ class Column extends AbstractAsset
     /**
      * @param string $value
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setColumnDefinition($value)
     {
@@ -272,7 +272,7 @@ class Column extends AbstractAsset
     }
 
     /**
-     * @return Type
+     * @return \Doctrine\DBAL\Types\Type
      */
     public function getType()
     {
@@ -382,19 +382,18 @@ class Column extends AbstractAsset
     /**
      * @param boolean $flag
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setAutoincrement($flag)
     {
         $this->_autoincrement = $flag;
-
         return $this;
     }
 
     /**
      * @param string $comment
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setComment($comment)
     {
@@ -415,7 +414,7 @@ class Column extends AbstractAsset
      * @param string $name
      * @param mixed  $value
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setCustomSchemaOption($name, $value)
     {
@@ -447,7 +446,7 @@ class Column extends AbstractAsset
     /**
      * @param array $customSchemaOptions
      *
-     * @return Column
+     * @return \Doctrine\DBAL\Schema\Column
      */
     public function setCustomSchemaOptions(array $customSchemaOptions)
     {
@@ -462,6 +461,14 @@ class Column extends AbstractAsset
     public function getCustomSchemaOptions()
     {
         return $this->_customSchemaOptions;
+    }
+
+    /**
+     * @param \Doctrine\DBAL\Schema\Visitor\Visitor $visitor
+     */
+    public function visit(Visitor $visitor)
+    {
+        $visitor->accept($this);
     }
 
     /**

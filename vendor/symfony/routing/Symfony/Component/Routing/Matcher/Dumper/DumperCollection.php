@@ -50,7 +50,7 @@ class DumperCollection implements \IteratorAggregate
      */
     public function add($child)
     {
-        if ($child instanceof self) {
+        if ($child instanceof DumperCollection) {
             $child->setParent($this);
         }
         $this->children[] = $child;
@@ -64,7 +64,7 @@ class DumperCollection implements \IteratorAggregate
     public function setAll(array $children)
     {
         foreach ($children as $child) {
-            if ($child instanceof self) {
+            if ($child instanceof DumperCollection) {
                 $child->setParent($this);
             }
         }

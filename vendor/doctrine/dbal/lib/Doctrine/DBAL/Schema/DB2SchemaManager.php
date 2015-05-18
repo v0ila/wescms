@@ -19,6 +19,9 @@
 
 namespace Doctrine\DBAL\Schema;
 
+use Doctrine\DBAL\Event\SchemaIndexDefinitionEventArgs;
+use Doctrine\DBAL\Events;
+
 /**
  * IBM Db2 Schema Manager.
  *
@@ -57,12 +60,6 @@ class DB2SchemaManager extends AbstractSchemaManager
         $scale = false;
         $precision = false;
 
-        $default = null;
-
-        if (null !== $tableColumn['default'] && 'NULL' != $tableColumn['default']) {
-            $default = trim($tableColumn['default'], "'");
-        }
-
         $type = $this->_platform->getDoctrineTypeMapping($tableColumn['typename']);
 
         switch (strtolower($tableColumn['typename'])) {
@@ -87,10 +84,9 @@ class DB2SchemaManager extends AbstractSchemaManager
 
         $options = array(
             'length'        => $length,
-            'unsigned'      => (bool) $unsigned,
-            'fixed'         => (bool) $fixed,
-            'default'       => $default,
-            'autoincrement' => (boolean) $tableColumn['autoincrement'],
+            'unsigned'      => (bool)$unsigned,
+            'fixed'         => (bool)$fixed,
+            'default'       => ($tableColumn['default'] == "NULL") ? null : $tableColumn['default'],
             'notnull'       => (bool) ($tableColumn['nulls'] == 'N'),
             'scale'         => null,
             'precision'     => null,
@@ -122,14 +118,46 @@ class DB2SchemaManager extends AbstractSchemaManager
     /**
      * {@inheritdoc}
      */
-    protected function _getPortableTableIndexesList($tableIndexRows, $tableName = null)
+    protected function _getPortableTableIndexesList($tableIndexes, $tableName=null)
     {
-        foreach ($tableIndexRows as &$tableIndexRow) {
-            $tableIndexRow = array_change_key_case($tableIndexRow, \CASE_LOWER);
-            $tableIndexRow['primary'] = (boolean) $tableIndexRow['primary'];
+        $eventManager = $this->_platform->getEventManager();
+
+        $indexes = array();
+        foreach($tableIndexes as $indexKey => $data) {
+            $data = array_change_key_case($data, \CASE_LOWER);
+            $unique = ($data['uniquerule'] == "D") ? false : true;
+            $primary = ($data['uniquerule'] == "P");
+
+            $indexName = strtolower($data['name']);
+
+            $data = array(
+                'name' => $indexName,
+                'columns' => explode("+", ltrim($data['colnames'], '+')),
+                'unique' => $unique,
+                'primary' => $primary
+            );
+
+            $index = null;
+            $defaultPrevented = false;
+
+            if (null !== $eventManager && $eventManager->hasListeners(Events::onSchemaIndexDefinition)) {
+                $eventArgs = new SchemaIndexDefinitionEventArgs($data, $tableName, $this->_conn);
+                $eventManager->dispatchEvent(Events::onSchemaIndexDefinition, $eventArgs);
+
+                $defaultPrevented = $eventArgs->isDefaultPrevented();
+                $index = $eventArgs->getIndex();
+            }
+
+            if ( ! $defaultPrevented) {
+                $index = new Index($data['name'], $data['columns'], $data['unique'], $data['primary']);
+            }
+
+            if ($index) {
+                $indexes[$indexKey] = $index;
+            }
         }
 
-        return parent::_getPortableTableIndexesList($tableIndexRows, $tableName);
+        return $indexes;
     }
 
     /**
@@ -137,43 +165,21 @@ class DB2SchemaManager extends AbstractSchemaManager
      */
     protected function _getPortableTableForeignKeyDefinition($tableForeignKey)
     {
+        $tableForeignKey = array_change_key_case($tableForeignKey, CASE_LOWER);
+
+        $tableForeignKey['deleterule'] = $this->_getPortableForeignKeyRuleDef($tableForeignKey['deleterule']);
+        $tableForeignKey['updaterule'] = $this->_getPortableForeignKeyRuleDef($tableForeignKey['updaterule']);
+
         return new ForeignKeyConstraint(
-            $tableForeignKey['local_columns'],
-            $tableForeignKey['foreign_table'],
-            $tableForeignKey['foreign_columns'],
-            $tableForeignKey['name'],
-            $tableForeignKey['options']
+            array_map('trim', (array)$tableForeignKey['fkcolnames']),
+            $tableForeignKey['reftbname'],
+            array_map('trim', (array)$tableForeignKey['pkcolnames']),
+            $tableForeignKey['relname'],
+            array(
+                'onUpdate' => $tableForeignKey['updaterule'],
+                'onDelete' => $tableForeignKey['deleterule'],
+            )
         );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _getPortableTableForeignKeysList($tableForeignKeys)
-    {
-        $foreignKeys = array();
-
-        foreach ($tableForeignKeys as $tableForeignKey) {
-            $tableForeignKey = array_change_key_case($tableForeignKey, \CASE_LOWER);
-
-            if (!isset($foreignKeys[$tableForeignKey['index_name']])) {
-                $foreignKeys[$tableForeignKey['index_name']] = array(
-                    'local_columns'   => array($tableForeignKey['local_column']),
-                    'foreign_table'   => $tableForeignKey['foreign_table'],
-                    'foreign_columns' => array($tableForeignKey['foreign_column']),
-                    'name'            => $tableForeignKey['index_name'],
-                    'options'         => array(
-                        'onUpdate' => $tableForeignKey['on_update'],
-                        'onDelete' => $tableForeignKey['on_delete'],
-                    )
-                );
-            } else {
-                $foreignKeys[$tableForeignKey['index_name']]['local_columns'][] = $tableForeignKey['local_column'];
-                $foreignKeys[$tableForeignKey['index_name']]['foreign_columns'][] = $tableForeignKey['foreign_column'];
-            }
-        }
-
-        return parent::_getPortableTableForeignKeysList($foreignKeys);
     }
 
     /**
@@ -183,7 +189,7 @@ class DB2SchemaManager extends AbstractSchemaManager
     {
         if ($def == "C") {
             return "CASCADE";
-        } elseif ($def == "N") {
+        } else if ($def == "N") {
             return "SET NULL";
         }
 

@@ -19,6 +19,7 @@
 
 namespace Doctrine\DBAL\Schema\Visitor;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
@@ -58,7 +59,7 @@ class RemoveNamespacedAssets extends AbstractVisitor
      */
     public function acceptTable(Table $table)
     {
-        if ( ! $table->isInDefaultNamespace($this->schema->getName())) {
+        if ( ! $table->isInDefaultNamespace($this->schema->getName()) ) {
             $this->schema->dropTable($table->getName());
         }
     }
@@ -68,7 +69,7 @@ class RemoveNamespacedAssets extends AbstractVisitor
      */
     public function acceptSequence(Sequence $sequence)
     {
-        if ( ! $sequence->isInDefaultNamespace($this->schema->getName())) {
+        if ( ! $sequence->isInDefaultNamespace($this->schema->getName()) ) {
             $this->schema->dropSequence($sequence->getName());
         }
     }
@@ -87,7 +88,7 @@ class RemoveNamespacedAssets extends AbstractVisitor
         }
 
         $foreignTable = $this->schema->getTable($fkConstraint->getForeignTableName());
-        if ( ! $foreignTable->isInDefaultNamespace($this->schema->getName())) {
+        if ( ! $foreignTable->isInDefaultNamespace($this->schema->getName()) ) {
             $localTable->removeForeignKey($fkConstraint->getName());
         }
     }

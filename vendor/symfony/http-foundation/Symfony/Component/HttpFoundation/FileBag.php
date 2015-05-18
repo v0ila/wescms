@@ -140,10 +140,10 @@ class FileBag extends ParameterBag
             unset($files[$k]);
         }
 
-        foreach ($data['name'] as $key => $name) {
+        foreach (array_keys($data['name']) as $key) {
             $files[$key] = $this->fixPhpFilesArray(array(
                 'error' => $data['error'][$key],
-                'name' => $name,
+                'name' => $data['name'][$key],
                 'type' => $data['type'][$key],
                 'tmp_name' => $data['tmp_name'][$key],
                 'size' => $data['size'][$key],

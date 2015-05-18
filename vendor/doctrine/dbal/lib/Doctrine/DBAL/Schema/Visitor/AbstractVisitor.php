@@ -19,6 +19,7 @@
 
 namespace Doctrine\DBAL\Schema\Visitor;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Column;
@@ -29,19 +30,12 @@ use Doctrine\DBAL\Schema\Index;
 /**
  * Abstract Visitor with empty methods for easy extension.
  */
-class AbstractVisitor implements Visitor, NamespaceVisitor
+class AbstractVisitor implements Visitor
 {
     /**
      * @param \Doctrine\DBAL\Schema\Schema $schema
      */
     public function acceptSchema(Schema $schema)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function acceptNamespace($namespaceName)
     {
     }
 

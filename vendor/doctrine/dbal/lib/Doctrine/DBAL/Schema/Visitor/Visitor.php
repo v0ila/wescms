@@ -19,6 +19,7 @@
 
 namespace Doctrine\DBAL\Schema\Visitor;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Column;

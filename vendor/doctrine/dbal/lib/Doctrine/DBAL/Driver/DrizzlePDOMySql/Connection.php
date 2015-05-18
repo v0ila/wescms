@@ -27,7 +27,7 @@ class Connection extends \Doctrine\DBAL\Driver\PDOConnection
     /**
      * {@inheritdoc}
      */
-    public function quote($value, $type = \PDO::PARAM_STR)
+    public function quote($value, $type=\PDO::PARAM_STR)
     {
         if (\PDO::PARAM_BOOL === $type) {
             if ($value) {
@@ -36,7 +36,6 @@ class Connection extends \Doctrine\DBAL\Driver\PDOConnection
                 return 'false';
             }
         }
-
         return parent::quote($value, $type);
     }
 }

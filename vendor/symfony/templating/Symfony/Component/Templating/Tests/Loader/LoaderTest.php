@@ -24,9 +24,6 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($logger, $loader->getLogger(), '->setLogger() sets the logger instance');
     }
 
-    /**
-     * @group legacy
-     */
     public function testLegacyGetSetDebugger()
     {
         $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);

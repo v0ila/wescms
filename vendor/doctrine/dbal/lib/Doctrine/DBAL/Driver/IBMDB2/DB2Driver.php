@@ -19,7 +19,8 @@
 
 namespace Doctrine\DBAL\Driver\IBMDB2;
 
-use Doctrine\DBAL\Driver\AbstractDB2Driver;
+use Doctrine\DBAL\Driver;
+use Doctrine\DBAL\Connection;
 
 /**
  * IBM DB2 Driver.
@@ -27,7 +28,7 @@ use Doctrine\DBAL\Driver\AbstractDB2Driver;
  * @since 2.0
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  */
-class DB2Driver extends AbstractDB2Driver
+class DB2Driver implements Driver
 {
     /**
      * {@inheritdoc}
@@ -60,8 +61,34 @@ class DB2Driver extends AbstractDB2Driver
     /**
      * {@inheritdoc}
      */
+    public function getDatabasePlatform()
+    {
+        return new \Doctrine\DBAL\Platforms\DB2Platform;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSchemaManager(Connection $conn)
+    {
+        return new \Doctrine\DBAL\Schema\DB2SchemaManager($conn);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getName()
     {
         return 'ibm_db2';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDatabase(\Doctrine\DBAL\Connection $conn)
+    {
+        $params = $conn->getParams();
+
+        return $params['dbname'];
     }
 }

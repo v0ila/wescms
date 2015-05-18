@@ -33,30 +33,23 @@ class Sequence extends AbstractAsset
     /**
      * @var integer
      */
-    protected $allocationSize = 1;
+    protected $_allocationSize = 1;
 
     /**
      * @var integer
      */
-    protected $initialValue = 1;
+    protected $_initialValue = 1;
 
     /**
-     * @var integer|null
+     * @param string  $name
+     * @param integer $allocationSize
+     * @param integer $initialValue
      */
-    protected $cache = null;
-
-    /**
-     * @param string       $name
-     * @param integer      $allocationSize
-     * @param integer      $initialValue
-     * @param integer|null $cache
-     */
-    public function __construct($name, $allocationSize = 1, $initialValue = 1, $cache = null)
+    public function __construct($name, $allocationSize=1, $initialValue=1)
     {
         $this->_setName($name);
-        $this->allocationSize = is_numeric($allocationSize) ? $allocationSize : 1;
-        $this->initialValue = is_numeric($initialValue) ? $initialValue : 1;
-        $this->cache = $cache;
+        $this->_allocationSize = (is_numeric($allocationSize))?$allocationSize:1;
+        $this->_initialValue = (is_numeric($initialValue))?$initialValue:1;
     }
 
     /**
@@ -64,7 +57,7 @@ class Sequence extends AbstractAsset
      */
     public function getAllocationSize()
     {
-        return $this->allocationSize;
+        return $this->_allocationSize;
     }
 
     /**
@@ -72,51 +65,27 @@ class Sequence extends AbstractAsset
      */
     public function getInitialValue()
     {
-        return $this->initialValue;
-    }
-
-    /**
-     * @return integer|null
-     */
-    public function getCache()
-    {
-        return $this->cache;
+        return $this->_initialValue;
     }
 
     /**
      * @param integer $allocationSize
      *
-     * @return \Doctrine\DBAL\Schema\Sequence
+     * @return void
      */
     public function setAllocationSize($allocationSize)
     {
-        $this->allocationSize = is_numeric($allocationSize) ? $allocationSize : 1;
-
-        return $this;
+        $this->_allocationSize = (is_numeric($allocationSize))?$allocationSize:1;
     }
 
     /**
      * @param integer $initialValue
      *
-     * @return \Doctrine\DBAL\Schema\Sequence
+     * @return void
      */
     public function setInitialValue($initialValue)
     {
-        $this->initialValue = is_numeric($initialValue) ? $initialValue : 1;
-
-        return $this;
-    }
-
-    /**
-     * @param integer $cache
-     *
-     * @return \Doctrine\DBAL\Schema\Sequence
-     */
-    public function setCache($cache)
-    {
-        $this->cache = $cache;
-
-        return $this;
+        $this->_initialValue = (is_numeric($initialValue))?$initialValue:1;
     }
 
     /**

@@ -24,7 +24,7 @@ namespace Doctrine\DBAL;
 /**
  * Doctrine\DBAL\ConnectionException
  *
- * @license http://www.opensource.org/licenses/mit-license.php MIT
+ * @license http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link    www.doctrine-project.org
  * @since   2.4
  * @author  Lars Strojny <lars@strojny.net>

@@ -19,19 +19,17 @@
 
 namespace Doctrine\DBAL;
 
-use Doctrine\DBAL\Driver\ServerInfoAwareConnection;
-use Doctrine\DBAL\Exception\InvalidArgumentException;
 use PDO;
 use Closure;
 use Exception;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Driver\Connection as DriverConnection;
 use Doctrine\Common\EventManager;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Cache\ResultCacheStatement;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 use Doctrine\DBAL\Cache\ArrayStatement;
 use Doctrine\DBAL\Cache\CacheException;
-use Doctrine\DBAL\Driver\PingableConnection;
 
 /**
  * A wrapper around a Doctrine\DBAL\Driver\Connection that adds features like
@@ -120,13 +118,6 @@ class Connection implements DriverConnection
     private $_isConnected = false;
 
     /**
-     * The current auto-commit mode of this connection.
-     *
-     * @var boolean
-     */
-    private $autoCommit = true;
-
-    /**
      * The transaction nesting level.
      *
      * @var integer
@@ -143,9 +134,9 @@ class Connection implements DriverConnection
     /**
      * If nested transactions should use savepoints.
      *
-     * @var boolean
+     * @var integer
      */
-    private $_nestTransactionsWithSavepoints = false;
+    private $_nestTransactionsWithSavepoints;
 
     /**
      * The parameters used during creation of the Connection instance.
@@ -160,7 +151,7 @@ class Connection implements DriverConnection
      *
      * @var \Doctrine\DBAL\Platforms\AbstractPlatform
      */
-    private $platform;
+    protected $_platform;
 
     /**
      * The schema manager.
@@ -207,7 +198,6 @@ class Connection implements DriverConnection
         if (isset($params['pdo'])) {
             $this->_conn = $params['pdo'];
             $this->_isConnected = true;
-            unset($this->_params['pdo']);
         }
 
         // Create default config and event manager if none given
@@ -224,7 +214,17 @@ class Connection implements DriverConnection
 
         $this->_expr = new Query\Expression\ExpressionBuilder($this);
 
-        $this->autoCommit = $config->getAutoCommit();
+        if ( ! isset($params['platform'])) {
+            $this->_platform = $driver->getDatabasePlatform();
+        } else if ($params['platform'] instanceof Platforms\AbstractPlatform) {
+            $this->_platform = $params['platform'];
+        } else {
+            throw DBALException::invalidPlatformSpecified();
+        }
+
+        $this->_platform->setEventManager($eventManager);
+
+        $this->_transactionIsolationLevel = $this->_platform->getDefaultTransactionIsolationLevel();
     }
 
     /**
@@ -324,11 +324,7 @@ class Connection implements DriverConnection
      */
     public function getDatabasePlatform()
     {
-        if (null == $this->platform) {
-            $this->detectDatabasePlatform();
-        }
-
-        return $this->platform;
+        return $this->_platform;
     }
 
     /**
@@ -360,127 +356,12 @@ class Connection implements DriverConnection
         $this->_conn = $this->_driver->connect($this->_params, $user, $password, $driverOptions);
         $this->_isConnected = true;
 
-        if (null === $this->platform) {
-            $this->detectDatabasePlatform();
-        }
-
-        if (false === $this->autoCommit) {
-            $this->beginTransaction();
-        }
-
         if ($this->_eventManager->hasListeners(Events::postConnect)) {
             $eventArgs = new Event\ConnectionEventArgs($this);
             $this->_eventManager->dispatchEvent(Events::postConnect, $eventArgs);
         }
 
         return true;
-    }
-
-    /**
-     * Detects and sets the database platform.
-     *
-     * Evaluates custom platform class and version in order to set the correct platform.
-     *
-     * @throws DBALException if an invalid platform was specified for this connection.
-     */
-    private function detectDatabasePlatform()
-    {
-        if ( ! isset($this->_params['platform'])) {
-            $version = $this->getDatabasePlatformVersion();
-
-            if (null !== $version) {
-                $this->platform = $this->_driver->createDatabasePlatformForVersion($version);
-            } else {
-                $this->platform = $this->_driver->getDatabasePlatform();
-            }
-        } elseif ($this->_params['platform'] instanceof Platforms\AbstractPlatform) {
-            $this->platform = $this->_params['platform'];
-        } else {
-            throw DBALException::invalidPlatformSpecified();
-        }
-
-        $this->platform->setEventManager($this->_eventManager);
-    }
-
-    /**
-     * Returns the version of the related platform if applicable.
-     *
-     * Returns null if either the driver is not capable to create version
-     * specific platform instances, no explicit server version was specified
-     * or the underlying driver connection cannot determine the platform
-     * version without having to query it (performance reasons).
-     *
-     * @return string|null
-     */
-    private function getDatabasePlatformVersion()
-    {
-        // Driver does not support version specific platforms.
-        if ( ! $this->_driver instanceof VersionAwarePlatformDriver) {
-            return null;
-        }
-
-        // Explicit platform version requested (supersedes auto-detection).
-        if (isset($this->_params['serverVersion'])) {
-            return $this->_params['serverVersion'];
-        }
-
-        // If not connected, we need to connect now to determine the platform version.
-        if (null === $this->_conn) {
-            $this->connect();
-        }
-
-        // Automatic platform version detection.
-        if ($this->_conn instanceof ServerInfoAwareConnection &&
-            ! $this->_conn->requiresQueryForServerVersion()
-        ) {
-            return $this->_conn->getServerVersion();
-        }
-
-        // Unable to detect platform version.
-        return null;
-    }
-
-    /**
-     * Returns the current auto-commit mode for this connection.
-     *
-     * @return boolean True if auto-commit mode is currently enabled for this connection, false otherwise.
-     *
-     * @see    setAutoCommit
-     */
-    public function isAutoCommit()
-    {
-        return true === $this->autoCommit;
-    }
-
-    /**
-     * Sets auto-commit mode for this connection.
-     *
-     * If a connection is in auto-commit mode, then all its SQL statements will be executed and committed as individual
-     * transactions. Otherwise, its SQL statements are grouped into transactions that are terminated by a call to either
-     * the method commit or the method rollback. By default, new connections are in auto-commit mode.
-     *
-     * NOTE: If this method is called during a transaction and the auto-commit mode is changed, the transaction is
-     * committed. If this method is called and the auto-commit mode is not changed, the call is a no-op.
-     *
-     * @param boolean $autoCommit True to enable auto-commit mode; false to disable it.
-     *
-     * @see   isAutoCommit
-     */
-    public function setAutoCommit($autoCommit)
-    {
-        $autoCommit = (boolean) $autoCommit;
-
-        // Mode not changed, no-op.
-        if ($autoCommit === $this->autoCommit) {
-            return;
-        }
-
-        $this->autoCommit = $autoCommit;
-
-        // Commit all currently active transactions if any when switching auto-commit mode.
-        if (true === $this->_isConnected && 0 !== $this->_transactionNestingLevel) {
-            $this->commitAll();
-        }
     }
 
     /**
@@ -501,13 +382,12 @@ class Connection implements DriverConnection
      *
      * @param string $statement The SQL query.
      * @param array  $params    The query parameters.
-     * @param array  $types     The query parameter types.
      *
      * @return array
      */
-    public function fetchAssoc($statement, array $params = array(), array $types = array())
+    public function fetchAssoc($statement, array $params = array())
     {
-        return $this->executeQuery($statement, $params, $types)->fetch(PDO::FETCH_ASSOC);
+        return $this->executeQuery($statement, $params)->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -516,13 +396,12 @@ class Connection implements DriverConnection
      *
      * @param string $statement The SQL query to be executed.
      * @param array  $params    The prepared statement params.
-     * @param array  $types     The query parameter types.
      *
      * @return array
      */
-    public function fetchArray($statement, array $params = array(), array $types = array())
+    public function fetchArray($statement, array $params = array())
     {
-        return $this->executeQuery($statement, $params, $types)->fetch(PDO::FETCH_NUM);
+        return $this->executeQuery($statement, $params)->fetch(PDO::FETCH_NUM);
     }
 
     /**
@@ -531,14 +410,13 @@ class Connection implements DriverConnection
      *
      * @param string  $statement The SQL query to be executed.
      * @param array   $params    The prepared statement params.
-     * @param integer $column    The 0-indexed column number to retrieve.
-     * @param array  $types      The query parameter types.
+     * @param integer $colnum    The 0-indexed column number to retrieve.
      *
      * @return mixed
      */
-    public function fetchColumn($statement, array $params = array(), $column = 0, array $types = array())
+    public function fetchColumn($statement, array $params = array(), $colnum = 0)
     {
-        return $this->executeQuery($statement, $params, $types)->fetchColumn($column);
+        return $this->executeQuery($statement, $params)->fetchColumn($colnum);
     }
 
     /**
@@ -564,22 +442,14 @@ class Connection implements DriverConnection
     /**
      * Executes an SQL DELETE statement on a table.
      *
-     * Table expression and columns are not escaped and are not safe for user-input.
-     *
-     * @param string $tableExpression  The expression of the table on which to delete.
+     * @param string $tableName  The name of the table on which to delete.
      * @param array  $identifier The deletion criteria. An associative array containing column-value pairs.
      * @param array  $types      The types of identifiers.
      *
      * @return integer The number of affected rows.
-     *
-     * @throws InvalidArgumentException
      */
-    public function delete($tableExpression, array $identifier, array $types = array())
+    public function delete($tableName, array $identifier, array $types = array())
     {
-        if (empty($identifier)) {
-            throw InvalidArgumentException::fromEmptyCriteria();
-        }
-
         $this->connect();
 
         $criteria = array();
@@ -588,11 +458,13 @@ class Connection implements DriverConnection
             $criteria[] = $columnName . ' = ?';
         }
 
-        return $this->executeUpdate(
-            'DELETE FROM ' . $tableExpression . ' WHERE ' . implode(' AND ', $criteria),
-            array_values($identifier),
-            is_string(key($types)) ? $this->extractTypeValues($identifier, $types) : $types
-        );
+        if ( ! is_int(key($types))) {
+            $types = $this->extractTypeValues($identifier, $types);
+        }
+
+        $query = 'DELETE FROM ' . $tableName . ' WHERE ' . implode(' AND ', $criteria);
+
+        return $this->executeUpdate($query, array_values($identifier), $types);
     }
 
     /**
@@ -602,7 +474,7 @@ class Connection implements DriverConnection
      */
     public function close()
     {
-        $this->_conn = null;
+        unset($this->_conn);
 
         $this->_isConnected = false;
     }
@@ -618,7 +490,7 @@ class Connection implements DriverConnection
     {
         $this->_transactionIsolationLevel = $level;
 
-        return $this->executeUpdate($this->getDatabasePlatform()->getSetTransactionIsolationSQL($level));
+        return $this->executeUpdate($this->_platform->getSetTransactionIsolationSQL($level));
     }
 
     /**
@@ -628,26 +500,20 @@ class Connection implements DriverConnection
      */
     public function getTransactionIsolation()
     {
-        if (null === $this->_transactionIsolationLevel) {
-            $this->_transactionIsolationLevel = $this->getDatabasePlatform()->getDefaultTransactionIsolationLevel();
-        }
-
         return $this->_transactionIsolationLevel;
     }
 
     /**
      * Executes an SQL UPDATE statement on a table.
      *
-     * Table expression and columns are not escaped and are not safe for user-input.
-     *
-     * @param string $tableExpression  The expression of the table to update quoted or unquoted.
+     * @param string $tableName  The name of the table to update.
      * @param array  $data       An associative array containing column-value pairs.
      * @param array  $identifier The update criteria. An associative array containing column-value pairs.
      * @param array  $types      Types of the merged $data and $identifier arrays in that order.
      *
      * @return integer The number of affected rows.
      */
-    public function update($tableExpression, array $data, array $identifier, array $types = array())
+    public function update($tableName, array $data, array $identifier, array $types = array())
     {
         $this->connect();
         $set = array();
@@ -656,13 +522,13 @@ class Connection implements DriverConnection
             $set[] = $columnName . ' = ?';
         }
 
-        if (is_string(key($types))) {
+        if ( ! is_int(key($types))) {
             $types = $this->extractTypeValues(array_merge($data, $identifier), $types);
         }
 
         $params = array_merge(array_values($data), array_values($identifier));
 
-        $sql  = 'UPDATE ' . $tableExpression . ' SET ' . implode(', ', $set)
+        $sql  = 'UPDATE ' . $tableName . ' SET ' . implode(', ', $set)
                 . ' WHERE ' . implode(' = ? AND ', array_keys($identifier))
                 . ' = ?';
 
@@ -672,27 +538,25 @@ class Connection implements DriverConnection
     /**
      * Inserts a table row with specified data.
      *
-     * Table expression and columns are not escaped and are not safe for user-input.
-     *
-     * @param string $tableExpression The expression of the table to insert data into, quoted or unquoted.
+     * @param string $tableName The name of the table to insert data into.
      * @param array  $data      An associative array containing column-value pairs.
      * @param array  $types     Types of the inserted data.
      *
      * @return integer The number of affected rows.
      */
-    public function insert($tableExpression, array $data, array $types = array())
+    public function insert($tableName, array $data, array $types = array())
     {
         $this->connect();
 
         if (empty($data)) {
-            return $this->executeUpdate('INSERT INTO ' . $tableExpression . ' ()' . ' VALUES ()');
+            return $this->executeUpdate('INSERT INTO ' . $tableName . ' ()' . ' VALUES ()');
         }
 
         return $this->executeUpdate(
-            'INSERT INTO ' . $tableExpression . ' (' . implode(', ', array_keys($data)) . ')' .
+            'INSERT INTO ' . $tableName . ' (' . implode(', ', array_keys($data)) . ')' .
             ' VALUES (' . implode(', ', array_fill(0, count($data), '?')) . ')',
             array_values($data),
-            is_string(key($types)) ? $this->extractTypeValues($data, $types) : $types
+            is_int(key($types)) ? $types : $this->extractTypeValues($data, $types)
         );
     }
 
@@ -733,7 +597,7 @@ class Connection implements DriverConnection
      */
     public function quoteIdentifier($str)
     {
-        return $this->getDatabasePlatform()->quoteIdentifier($str);
+        return $this->_platform->quoteIdentifier($str);
     }
 
     /**
@@ -782,7 +646,7 @@ class Connection implements DriverConnection
         try {
             $stmt = new Statement($statement, $this);
         } catch (\Exception $ex) {
-            throw DBALException::driverExceptionDuringQuery($this->_driver, $ex, $statement);
+            throw DBALException::driverExceptionDuringQuery($ex, $statement);
         }
 
         $stmt->setFetchMode($this->defaultFetchMode);
@@ -804,6 +668,8 @@ class Connection implements DriverConnection
      * @return \Doctrine\DBAL\Driver\Statement The executed statement.
      *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @internal PERF: Directly prepares a driver statement, not a wrapper.
      */
     public function executeQuery($query, array $params = array(), $types = array(), QueryCacheProfile $qcp = null)
     {
@@ -833,7 +699,7 @@ class Connection implements DriverConnection
                 $stmt = $this->_conn->query($query);
             }
         } catch (\Exception $ex) {
-            throw DBALException::driverExceptionDuringQuery($this->_driver, $ex, $query, $this->resolveParams($params, $types));
+            throw DBALException::driverExceptionDuringQuery($ex, $query, $this->resolveParams($params, $types));
         }
 
         $stmt->setFetchMode($this->defaultFetchMode);
@@ -871,7 +737,7 @@ class Connection implements DriverConnection
             // is the real key part of this row pointers map or is the cache only pointing to other cache keys?
             if (isset($data[$realKey])) {
                 $stmt = new ArrayStatement($data[$realKey]);
-            } elseif (array_key_exists($realKey, $data)) {
+            } else if (array_key_exists($realKey, $data)) {
                 $stmt = new ArrayStatement(array());
             }
         }
@@ -895,12 +761,12 @@ class Connection implements DriverConnection
      *                           The function receives a single parameter, an array, that
      *                           represents a row of the result set.
      *
-     * @return array The projected result of the query.
+     * @return mixed The projected result of the query.
      */
     public function project($query, array $params, Closure $function)
     {
         $result = array();
-        $stmt = $this->executeQuery($query, $params);
+        $stmt = $this->executeQuery($query, $params ?: array());
 
         while ($row = $stmt->fetch()) {
             $result[] = $function($row);
@@ -942,7 +808,7 @@ class Connection implements DriverConnection
                     break;
             }
         } catch (\Exception $ex) {
-            throw DBALException::driverExceptionDuringQuery($this->_driver, $ex, $args[0]);
+            throw DBALException::driverExceptionDuringQuery($ex, $args[0]);
         }
 
         $statement->setFetchMode($this->defaultFetchMode);
@@ -967,6 +833,8 @@ class Connection implements DriverConnection
      * @return integer The number of affected rows.
      *
      * @throws \Doctrine\DBAL\DBALException
+     *
+     * @internal PERF: Directly prepares a driver statement, not a wrapper.
      */
     public function executeUpdate($query, array $params = array(), array $types = array())
     {
@@ -993,7 +861,7 @@ class Connection implements DriverConnection
                 $result = $this->_conn->exec($query);
             }
         } catch (\Exception $ex) {
-            throw DBALException::driverExceptionDuringQuery($this->_driver, $ex, $query, $this->resolveParams($params, $types));
+            throw DBALException::driverExceptionDuringQuery($ex, $query, $this->resolveParams($params, $types));
         }
 
         if ($logger) {
@@ -1024,7 +892,7 @@ class Connection implements DriverConnection
         try {
             $result = $this->_conn->exec($statement);
         } catch (\Exception $ex) {
-            throw DBALException::driverExceptionDuringQuery($this->_driver, $ex, $statement);
+            throw DBALException::driverExceptionDuringQuery($ex, $statement);
         }
 
         if ($logger) {
@@ -1128,11 +996,11 @@ class Connection implements DriverConnection
             throw ConnectionException::mayNotAlterNestedTransactionWithSavepointsInTransaction();
         }
 
-        if ( ! $this->getDatabasePlatform()->supportsSavepoints()) {
+        if ( ! $this->_platform->supportsSavepoints()) {
             throw ConnectionException::savepointsNotSupported();
         }
 
-        $this->_nestTransactionsWithSavepoints = (bool) $nestTransactionsWithSavepoints;
+        $this->_nestTransactionsWithSavepoints = $nestTransactionsWithSavepoints;
     }
 
     /**
@@ -1177,7 +1045,7 @@ class Connection implements DriverConnection
             if ($logger) {
                 $logger->stopQuery();
             }
-        } elseif ($this->_nestTransactionsWithSavepoints) {
+        } else if ($this->_nestTransactionsWithSavepoints) {
             if ($logger) {
                 $logger->startQuery('"SAVEPOINT"');
             }
@@ -1217,7 +1085,7 @@ class Connection implements DriverConnection
             if ($logger) {
                 $logger->stopQuery();
             }
-        } elseif ($this->_nestTransactionsWithSavepoints) {
+        } else if ($this->_nestTransactionsWithSavepoints) {
             if ($logger) {
                 $logger->startQuery('"RELEASE SAVEPOINT"');
             }
@@ -1228,28 +1096,6 @@ class Connection implements DriverConnection
         }
 
         --$this->_transactionNestingLevel;
-
-        if (false === $this->autoCommit && 0 === $this->_transactionNestingLevel) {
-            $this->beginTransaction();
-        }
-    }
-
-    /**
-     * Commits all current nesting transactions.
-     */
-    private function commitAll()
-    {
-        while (0 !== $this->_transactionNestingLevel) {
-            if (false === $this->autoCommit && 1 === $this->_transactionNestingLevel) {
-                // When in no auto-commit mode, the last nesting commit immediately starts a new transaction.
-                // Therefore we need to do the final commit here and then leave to avoid an infinite loop.
-                $this->commit();
-
-                return;
-            }
-
-            $this->commit();
-        }
     }
 
     /**
@@ -1280,11 +1126,7 @@ class Connection implements DriverConnection
             if ($logger) {
                 $logger->stopQuery();
             }
-
-            if (false === $this->autoCommit) {
-                $this->beginTransaction();
-            }
-        } elseif ($this->_nestTransactionsWithSavepoints) {
+        } else if ($this->_nestTransactionsWithSavepoints) {
             if ($logger) {
                 $logger->startQuery('"ROLLBACK TO SAVEPOINT"');
             }
@@ -1310,11 +1152,11 @@ class Connection implements DriverConnection
      */
     public function createSavepoint($savepoint)
     {
-        if ( ! $this->getDatabasePlatform()->supportsSavepoints()) {
+        if ( ! $this->_platform->supportsSavepoints()) {
             throw ConnectionException::savepointsNotSupported();
         }
 
-        $this->_conn->exec($this->platform->createSavePoint($savepoint));
+        $this->_conn->exec($this->_platform->createSavePoint($savepoint));
     }
 
     /**
@@ -1328,12 +1170,12 @@ class Connection implements DriverConnection
      */
     public function releaseSavepoint($savepoint)
     {
-        if ( ! $this->getDatabasePlatform()->supportsSavepoints()) {
+        if ( ! $this->_platform->supportsSavepoints()) {
             throw ConnectionException::savepointsNotSupported();
         }
 
-        if ($this->platform->supportsReleaseSavepoints()) {
-            $this->_conn->exec($this->platform->releaseSavePoint($savepoint));
+        if ($this->_platform->supportsReleaseSavepoints()) {
+            $this->_conn->exec($this->_platform->releaseSavePoint($savepoint));
         }
     }
 
@@ -1348,11 +1190,11 @@ class Connection implements DriverConnection
      */
     public function rollbackSavepoint($savepoint)
     {
-        if ( ! $this->getDatabasePlatform()->supportsSavepoints()) {
+        if ( ! $this->_platform->supportsSavepoints()) {
             throw ConnectionException::savepointsNotSupported();
         }
 
-        $this->_conn->exec($this->platform->rollbackSavePoint($savepoint));
+        $this->_conn->exec($this->_platform->rollbackSavePoint($savepoint));
     }
 
     /**
@@ -1425,7 +1267,7 @@ class Connection implements DriverConnection
      */
     public function convertToDatabaseValue($value, $type)
     {
-        return Type::getType($type)->convertToDatabaseValue($value, $this->getDatabasePlatform());
+        return Type::getType($type)->convertToDatabaseValue($value, $this->_platform);
     }
 
     /**
@@ -1439,7 +1281,7 @@ class Connection implements DriverConnection
      */
     public function convertToPHPValue($value, $type)
     {
-        return Type::getType($type)->convertToPHPValue($value, $this->getDatabasePlatform());
+        return Type::getType($type)->convertToPHPValue($value, $this->_platform);
     }
 
     /**
@@ -1501,7 +1343,7 @@ class Connection implements DriverConnection
             $type = Type::getType($type);
         }
         if ($type instanceof Type) {
-            $value = $type->convertToDatabaseValue($value, $this->getDatabasePlatform());
+            $value = $type->convertToDatabaseValue($value, $this->_platform);
             $bindingType = $type->getBindingType();
         } else {
             $bindingType = $type; // PDO::PARAM_* constants
@@ -1565,43 +1407,5 @@ class Connection implements DriverConnection
     public function createQueryBuilder()
     {
         return new Query\QueryBuilder($this);
-    }
-
-    /**
-     * Ping the server
-     *
-     * When the server is not available the method returns FALSE.
-     * It is responsibility of the developer to handle this case
-     * and abort the request or reconnect manually:
-     *
-     * @example
-     *
-     *   if ($conn->ping() === false) {
-     *      $conn->close();
-     *      $conn->connect();
-     *   }
-     *
-     * It is undefined if the underlying driver attempts to reconnect
-     * or disconnect when the connection is not available anymore
-     * as long it returns TRUE when a reconnect succeeded and
-     * FALSE when the connection was dropped.
-     *
-     * @return bool
-     */
-    public function ping()
-    {
-        $this->connect();
-
-        if ($this->_conn instanceof PingableConnection) {
-            return $this->_conn->ping();
-        }
-
-        try {
-            $this->query($this->platform->getDummySelectSQL());
-
-            return true;
-        } catch (DBALException $e) {
-            return false;
-        }
     }
 }

@@ -76,7 +76,6 @@ class StopwatchEventTest extends \PHPUnit_Framework_TestCase
         $event->start();
         usleep(100000);
         $event->stop();
-        usleep(50000);
         $event->start();
         usleep(100000);
         $event->stop();
@@ -94,7 +93,6 @@ class StopwatchEventTest extends \PHPUnit_Framework_TestCase
         $event->start();
         usleep(100000);
         $event->stop();
-        usleep(50000);
         $event->start();
         usleep(100000);
         $this->assertEquals(100, $event->getDuration(), null, self::DELTA);
@@ -156,6 +154,6 @@ class StopwatchEventTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidOriginThrowsAnException()
     {
-        new StopwatchEvent('abc');
+        new StopwatchEvent("abc");
     }
 }

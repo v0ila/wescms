@@ -19,6 +19,7 @@
 
 namespace Doctrine\DBAL\Portability;
 
+use Doctrine\DBAL\Driver;
 use Doctrine\DBAL\Cache\QueryCacheProfile;
 
 /**
@@ -36,13 +37,11 @@ class Connection extends \Doctrine\DBAL\Connection
     const PORTABILITY_EMPTY_TO_NULL     = 4;
     const PORTABILITY_FIX_CASE          = 8;
 
-    const PORTABILITY_DB2               = 13;
     const PORTABILITY_ORACLE            = 9;
     const PORTABILITY_POSTGRESQL        = 13;
     const PORTABILITY_SQLITE            = 13;
     const PORTABILITY_OTHERVENDORS      = 12;
     const PORTABILITY_DRIZZLE           = 13;
-    const PORTABILITY_SQLANYWHERE       = 13;
     const PORTABILITY_SQLSRV            = 13;
 
     /**
@@ -64,20 +63,16 @@ class Connection extends \Doctrine\DBAL\Connection
         if ($ret) {
             $params = $this->getParams();
             if (isset($params['portability'])) {
-                if ($this->getDatabasePlatform()->getName() === "oracle") {
+                if ($this->_platform->getName() === "oracle") {
                     $params['portability'] = $params['portability'] & self::PORTABILITY_ORACLE;
-                } elseif ($this->getDatabasePlatform()->getName() === "postgresql") {
+                } else if ($this->_platform->getName() === "postgresql") {
                     $params['portability'] = $params['portability'] & self::PORTABILITY_POSTGRESQL;
-                } elseif ($this->getDatabasePlatform()->getName() === "sqlite") {
+                } else if ($this->_platform->getName() === "sqlite") {
                     $params['portability'] = $params['portability'] & self::PORTABILITY_SQLITE;
-                } elseif ($this->getDatabasePlatform()->getName() === "drizzle") {
+                } else if ($this->_platform->getName() === "drizzle") {
                     $params['portability'] = self::PORTABILITY_DRIZZLE;
-                } elseif ($this->getDatabasePlatform()->getName() === 'sqlanywhere') {
-                    $params['portability'] = self::PORTABILITY_SQLANYWHERE;
-                } elseif ($this->getDatabasePlatform()->getName() === 'db2') {
-                    $params['portability'] = self::PORTABILITY_DB2;
-                } elseif ($this->getDatabasePlatform()->getName() === 'mssql') {
-                    $params['portability'] = $params['portability'] & self::PORTABILITY_SQLSRV;
+                } else if ($this->_platform->getName() === 'sqlsrv') {
+                    $params['portability'] = $params['portabililty'] & self::PORTABILITY_SQLSRV;
                 } else {
                     $params['portability'] = $params['portability'] & self::PORTABILITY_OTHERVENDORS;
                 }
