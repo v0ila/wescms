@@ -1,0 +1,119 @@
+<?php /* C:\xampp\htdocs\cms\extensions/system/views/admin/settings/info.razr */ extract(array (  'info' => NULL,  'directory' => NULL,  'writable' => NULL,), EXTR_SKIP) ?><ul class="uk-tab" data-uk-tab="{connect:'#tab-content'}">
+    <li class="uk-active"><a href="#"><?php echo __('System') ?></a></li>
+    <li><a href="#"><?php echo __('PHP') ?></a></li>
+    <li><a href="#"><?php echo __('Database') ?></a></li>
+    <li><a href="#"><?php echo __('Permissions') ?></a></li>
+</ul>
+
+<ul id="tab-content" class="uk-switcher uk-margin">
+    <li>
+
+        <div class="uk-overflow-container">
+            <table class="uk-table uk-table-striped">
+                <thead>
+                    <tr>
+                        <th><?php echo __('Setting') ?></th>
+                        <th><?php echo __('Value') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="uk-text-nowrap"><?php echo __('Pagekit Version') ?></td>
+                        <td><?php echo $this->escape(( $this->getAttribute($info, 'version', array(), 'array') ) ) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="uk-text-nowrap"><?php echo __('Web Server') ?></td>
+                        <td class="pk-table-text-break"><?php echo $this->escape(( $this->getAttribute($info, 'server', array(), 'array') ) ) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="uk-text-nowrap"><?php echo __('User Agent') ?></td>
+                        <td class="pk-table-text-break"><?php echo $this->escape(( $this->getAttribute($info, 'useragent', array(), 'array') ) ) ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </li>
+    <li>
+
+        <div class="uk-overflow-container">
+            <table class="uk-table uk-table-striped">
+                <thead>
+                    <tr>
+                        <th><?php echo __('Setting') ?></th>
+                        <th><?php echo __('Value') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?php echo __('Version') ?></td>
+                        <td><?php echo $this->escape(( $this->getAttribute($info, 'phpversion', array(), 'array') ) ) ?></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo __('Handler') ?></td>
+                        <td><?php echo $this->escape(( $this->getAttribute($info, 'sapi_name', array(), 'array')) ) ?></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo __('Built On') ?></td>
+                        <td class="pk-table-text-break"><?php echo $this->escape(( $this->getAttribute($info, 'php', array(), 'array') ) ) ?></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo __('Extensions') ?></td>
+                        <td class="pk-table-text-break"><?php echo $this->escape(( $this->getAttribute($info, 'extensions', array(), 'array') ) ) ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </li>
+    <li>
+
+        <div class="uk-overflow-container">
+            <table class="uk-table uk-table-striped">
+                <thead>
+                    <tr>
+                        <th><?php echo __('Setting') ?></th>
+                        <th><?php echo __('Value') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><?php echo __('Driver') ?></td>
+                        <td><?php echo $this->escape(( $this->getAttribute($info, 'dbdriver', array(), 'array') ) ) ?></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo __('Version') ?></td>
+                        <td><?php echo $this->escape(( $this->getAttribute($info, 'dbversion', array(), 'array') ) ) ?></td>
+                    </tr>
+                    <tr>
+                        <td><?php echo __('Client') ?></td>
+                        <td class="pk-table-text-break"><?php echo $this->escape(( $this->getAttribute($info, 'dbclient', array(), 'array') ) ) ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </li>
+    <li>
+
+        <div class="uk-overflow-container">
+            <table class="uk-table uk-table-striped">
+                <thead>
+                    <tr>
+                        <th><?php echo __('Path') ?></th>
+                        <th class="uk-text-center pk-table-width-100"><?php echo __('Status') ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($this->getAttribute($info, 'directories', array(), 'array') as $directory => $writable) :?>
+                    <tr>
+                        <td><?php echo $this->escape(( $directory ) ) ?></td>
+                        <td class="uk-text-center<?php echo $this->escape(( $writable ? ' uk-text-success' : ' uk-text-danger' ) ) ?>"><?php echo $this->escape(( $writable ? __('Writable') : __('Unwritable') ) ) ?></span></td>
+                    </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+
+    </li>
+</ul>

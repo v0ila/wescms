@@ -1,0 +1,39 @@
+<?php return array (
+  'lifetime' => 0,
+  'data' => 
+  array (
+    'class' => 'Pagekit\\System\\Entity\\Alias',
+    'eventPrefix' => 'system.alias',
+    'events' => 
+    array (
+    ),
+    'fields' => 
+    array (
+      'id' => 
+      array (
+        'name' => 'id',
+        'type' => 'integer',
+        'id' => true,
+        'column' => 'id',
+      ),
+      'source' => 
+      array (
+        'name' => 'source',
+        'type' => 'string',
+        'column' => 'source',
+      ),
+      'alias' => 
+      array (
+        'name' => 'alias',
+        'type' => 'string',
+        'column' => 'alias',
+      ),
+    ),
+    'isMappedSuperclass' => false,
+    'relations' => 
+    array (
+    ),
+    'repositoryClass' => NULL,
+    'table' => '@system_url_alias',
+  ),
+);

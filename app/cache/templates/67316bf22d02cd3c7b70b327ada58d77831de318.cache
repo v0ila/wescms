@@ -1,0 +1,143 @@
+<?php /* C:\xampp\htdocs\cms\extensions/system/theme/templates/template.razr */ extract(array (  'subset' => NULL,  'nav' => NULL,  'item' => NULL,  'subnav' => NULL,  'user' => NULL,  'app' => NULL,), EXTR_SKIP) ?><!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="<?php echo($this->getDirective('url')->call(array('extension://system/theme/favicon.ico'))) ?>" rel="shortcut icon" type="image/x-icon">
+        <link href="<?php echo($this->getDirective('url')->call(array('extension://system/theme/apple_touch_icon.png'))) ?>" rel="apple-touch-icon-precomposed">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600&amp;subset=<?php echo $this->escape(($subset) ) ?>" rel="stylesheet">
+        <?php $app['view.sections']->output('head') ?>
+        <?php echo($this->getDirective('style')->call(array('theme', 'extension://system/theme/css/theme.css'))) ?>
+        <?php echo($this->getDirective('script')->call(array('theme', 'extension://system/theme/js/theme.js', ['jquery', 'uikit', 'uikit-notify', 'uikit-sticky', 'uikit-sortable']))) ?>
+    </head>
+    <body>
+
+        <div class="tm-navbar <?php echo $this->escape(( $this->callFunction('hasSection', array('toolbar')) ? 'tm-navbar-margin' : '' ) ) ?>">
+            <div class="uk-container uk-container-center">
+
+                <nav class="uk-navbar">
+
+                    <div class="uk-navbar-content uk-hidden-small">
+                        <div class="uk-display-inline-block" data-uk-dropdown>
+                            <img class="tm-logo" src="<?php echo($this->getDirective('url')->call(array('extension://system/assets/images/pagekit-logo.svg'))) ?>" width="24" height="29" alt="<?php echo __('Pagekit') ?>">
+                            <div class="uk-dropdown tm-dropdown">
+                                <ul class="uk-sortable uk-grid uk-grid-small uk-grid-width-1-3 js-admin-menu" data-url="<?php echo($this->getDirective('url')->call(array('@system/system/adminmenu'))) ?>" data-uk-sortable="{ dragCustomClass: 'tm-sortable-dragged', handleClass: 'uk-panel' }">
+                                <?php foreach($this->getAttribute($nav, 'children') as $item) :?>
+                                    <li<?php echo( $this->getAttribute($item, 'attribute', array('active'), 'method') ? ' class="uk-active"' : '' ) ?> data-id="<?php echo $this->escape(( $this->getAttribute($item, 'getId', array(), 'method') ) ) ?>">
+                                        <a class="uk-panel pk-panel-icon" href="<?php echo($this->getDirective('url')->call(array($this->getAttribute($item, 'url')))) ?>">
+                                            <img  src="<?php echo($this->getDirective('url')->call(array( $this->getAttribute($item, 'getIcon', array(), 'method') ?: 'extension://system/assets/images/placeholder-icon.svg' ))) ?>" width="50" height="50" alt="<?php echo __($item) ?>">
+                                            <p><?php echo __($item) ?></p>
+                                        </a>
+                                    </li>
+                                <?php endforeach ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a class="uk-navbar-content uk-visible-small" href="#offcanvas" data-uk-offcanvas>
+                        <img class="tm-logo" src="<?php echo($this->getDirective('url')->call(array('extension://system/assets/images/pagekit-logo.svg'))) ?>" width="24" height="29" alt="<?php echo __('Pagekit') ?>">
+                    </a>
+
+                    <ul class="uk-navbar-nav uk-hidden-small">
+                        <?php if(!$this->getAttribute($subnav, 'children')) :?>
+                        <li<?php echo( $this->getAttribute($subnav, 'attribute', array('active'), 'method') ? ' class="uk-active"' : '' ) ?>>
+                            <a href="<?php echo($this->getDirective('url')->call(array($this->getAttribute($subnav, 'url')))) ?>"><?php echo __($subnav) ?></a>
+                        </li>
+                        <?php else :?>
+                        <?php foreach($this->getAttribute($subnav, 'children') as $item) :?>
+                        <li<?php echo( $this->getAttribute($item, 'attribute', array('active'), 'method') ? ' class="uk-active"' : '') ?>>
+                            <a href="<?php echo($this->getDirective('url')->call(array($this->getAttribute($item, 'url')))) ?>"><?php echo __($item) ?></a>
+                        </li>
+                        <?php endforeach ?>
+                        <?php endif ?>
+                    </ul>
+
+                    <div class="uk-navbar-flip">
+
+                        <div class="uk-navbar-content uk-hidden-small">
+                            <div class="uk-display-inline-block" data-uk-dropdown>
+                                <?php ($user = $this->getAttribute($this->getAttribute($app, 'users'), 'get', array(), 'method')) ?>
+                                <?php echo($this->getDirective('gravatar')->call(array($this->getAttribute($user, 'email'), ['size' => 72, 'attrs' => ['width' => '36', 'height' => '36', 'class' => 'uk-border-circle', 'alt' => $this->getAttribute($user, 'username')]]))) ?>
+                                <div class="uk-dropdown uk-dropdown-small uk-dropdown-flip">
+                                    <ul class="uk-nav uk-nav-dropdown">
+                                        <li class="uk-nav-header"><?php echo $this->escape(( $this->getAttribute($user, 'username') ) ) ?></li>
+                                        <li><a href="<?php echo($this->getDirective('url')->call(array())) ?>" target="_blank"><?php echo __('Visit Site') ?></a></li>
+                                        <li><a href="<?php echo($this->getDirective('url')->call(array('@system/user/edit', ['id' => $this->getAttribute($user, 'id')]))) ?>"><?php echo __('Settings') ?></a></li>
+                                        <li><a href="<?php echo($this->getDirective('url')->call(array('@system/auth/logout', ['redirect' => $this->callFunction('url', array('@system/system/admin', [], true))]))) ?>"><?php echo __('Logout') ?></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a class="uk-navbar-content uk-visible-small" href="#offcanvas-flip" data-uk-offcanvas>
+                            <?php echo($this->getDirective('gravatar')->call(array($this->getAttribute($user, 'email'), ['size' => 72, 'attrs' => ['width' => '36', 'height' => '36', 'class' => 'uk-border-circle', 'alt' => $this->getAttribute($user, 'username')]]))) ?>
+                        </a>
+
+                    </div>
+
+                    <div class="uk-navbar-content uk-navbar-center uk-visible-small">
+                        <?php if($this->getAttribute($subnav, 'children')) :?>
+                            <?php foreach($this->getAttribute($subnav, 'children') as $item) :?>
+                                <?php echo $this->escape(( $this->getAttribute($item, 'attribute', array('active'), 'method') ? __($item) : '' ) ) ?>
+                            <?php endforeach ?>
+                        <?php else :?>
+                            <?php echo __($subnav) ?>
+                        <?php endif ?>
+                    </div>
+
+                </nav>
+
+            </div>
+        </div>
+
+        <div class="tm-main uk-container uk-container-center"><?php $app['view.sections']->output('content') ?></div>
+
+        <div class="uk-hidden"><?php $app['view.sections']->output('messages') ?></div>
+
+        <div id="offcanvas" class="uk-offcanvas">
+            <div class="uk-offcanvas-bar">
+
+                <ul class="uk-nav uk-nav-offcanvas">
+                    <?php if($this->getAttribute($subnav, 'children')) :?>
+                        <li class="uk-nav-header"><?php echo __($subnav) ?></li>
+                        <li<?php echo( $this->getAttribute($subnav, 'attribute', array('active'), 'method') ? ' class="uk-active"' : '' ) ?>>
+                            <a href="<?php echo($this->getDirective('url')->call(array($this->getAttribute($subnav, 'url')))) ?>"><?php echo __($subnav) ?></a>
+                        </li>
+                        <?php foreach($this->getAttribute($subnav, 'children') as $item) :?>
+                            <li<?php echo( $this->getAttribute($item, 'attribute', array('active'), 'method') ? ' class="uk-active"' : '' ) ?>>
+                                <a href="<?php echo($this->getDirective('url')->call(array($this->getAttribute($item, 'url')))) ?>"><?php echo __($item) ?></a>
+                            </li>
+                        <?php endforeach ?>
+                        <li class="uk-nav-divider"></li>
+                    <?php endif ?>
+                    <li class="uk-nav-header"><?php echo __('Extensions') ?></li>
+                    <?php foreach($this->getAttribute($nav, 'children') as $item) :?>
+                        <li<?php echo( $this->getAttribute($item, 'attribute', array('active'), 'method') ? ' class="uk-active"' : '') ?>>
+                            <a href="<?php echo($this->getDirective('url')->call(array($this->getAttribute($item, 'url')))) ?>">
+                                <img class="uk-margin-small-right" src="<?php echo($this->getDirective('url')->call(array($this->getAttribute($item, 'getIcon', array(), 'method') ?: 'extension://system/assets/images/placeholder-icon.svg' ))) ?>" width="34" height="34" alt="<?php echo __($item) ?>">
+                                <?php echo __($item) ?>
+                            </a>
+                        </li>
+                    <?php endforeach ?>
+                </ul>
+
+            </div>
+        </div>
+
+        <div id="offcanvas-flip" class="uk-offcanvas">
+            <div class="uk-offcanvas-bar uk-offcanvas-bar-flip">
+
+                <ul class="uk-nav uk-nav-offcanvas">
+                    <li class="uk-nav-header"><?php echo $this->escape(( $this->getAttribute($user, 'username') ) ) ?></li>
+                    <li><a href="<?php echo($this->getDirective('url')->call(array())) ?>"><?php echo __('Visit Site') ?></a></li>
+                    <li><a href="<?php echo($this->getDirective('url')->call(array('@system/user/edit', ['id' => $this->getAttribute($user, 'id')]))) ?>"><?php echo __('Settings') ?></a></li>
+                    <li><a href="<?php echo($this->getDirective('url')->call(array('@system/auth/logout', ['redirect' => $this->callFunction('url', array('@system/system/admin', [], true))]))) ?>"><?php echo __('Logout') ?></a></li>
+                </ul>
+
+            </div>
+        </div>
+
+    </body>
+</html>

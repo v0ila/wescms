@@ -1,0 +1,778 @@
+<?php
+
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\RequestContext;
+
+/**
+ * UrlMatcher8144ce9594bea6b29f6d1e67d9768b72dd2e8553
+ *
+ * This class has been auto-generated
+ * by the Symfony Routing Component.
+ */
+class UrlMatcher8144ce9594bea6b29f6d1e67d9768b72dd2e8553 extends Symfony\Component\Routing\Matcher\UrlMatcher
+{
+    /**
+     * Constructor.
+     */
+    public function __construct(RequestContext $context)
+    {
+        $this->context = $context;
+    }
+
+    public function match($pathinfo)
+    {
+        $allow = array();
+        $pathinfo = rawurldecode($pathinfo);
+        $context = $this->context;
+        $request = $this->request;
+
+        if (0 === strpos($pathinfo, '/admin/system')) {
+            if (0 === strpos($pathinfo, '/admin/system/extensions')) {
+                // @system/extensions
+                if ($pathinfo === '/admin/system/extensions') {
+                    return array (  '_controller' => 'Pagekit\\Extension\\Controller\\ExtensionsController::indexAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/extensions/index.razr',  ),  '_access' =>   array (    0 => 'system: manage extensions',    1 => 'system: access admin area',  ),  '_route' => '@system/extensions',);
+                }
+
+                // @system/extensions/enable
+                if ($pathinfo === '/admin/system/extensions/enable') {
+                    return array (  '_controller' => 'Pagekit\\Extension\\Controller\\ExtensionsController::enableAction',  '_request' =>   array (    'value' =>     array (      0 => 'name',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage extensions',    1 => 'system: access admin area',  ),  '_route' => '@system/extensions/enable',);
+                }
+
+                // @system/extensions/disable
+                if ($pathinfo === '/admin/system/extensions/disable') {
+                    return array (  '_controller' => 'Pagekit\\Extension\\Controller\\ExtensionsController::disableAction',  '_request' =>   array (    'value' =>     array (      0 => 'name',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage extensions',    1 => 'system: access admin area',  ),  '_route' => '@system/extensions/disable',);
+                }
+
+                // @system/extensions/uninstall
+                if ($pathinfo === '/admin/system/extensions/uninstall') {
+                    return array (  '_controller' => 'Pagekit\\Extension\\Controller\\ExtensionsController::uninstallAction',  '_request' =>   array (    'value' =>     array (      0 => 'name',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage extensions',    1 => 'system: access admin area',  ),  '_route' => '@system/extensions/uninstall',);
+                }
+
+                if (0 === strpos($pathinfo, '/admin/system/extensions/s')) {
+                    // @system/extensions/settings
+                    if ($pathinfo === '/admin/system/extensions/settings') {
+                        return array (  '_controller' => 'Pagekit\\Extension\\Controller\\ExtensionsController::settingsAction',  '_request' =>   array (    'value' =>     array (      0 => 'name',    ),  ),  '_access' =>   array (    0 => 'system: manage extensions',    1 => 'system: access admin area',  ),  '_route' => '@system/extensions/settings',);
+                    }
+
+                    // @system/extensions/savesettings
+                    if ($pathinfo === '/admin/system/extensions/savesettings') {
+                        return array (  '_controller' => 'Pagekit\\Extension\\Controller\\ExtensionsController::saveSettingsAction',  '_request' =>   array (    'value' =>     array (      0 => 'name',      'params' => 'array',    ),  ),  '_access' =>   array (    0 => 'system: manage extensions',    1 => 'system: access admin area',  ),  '_route' => '@system/extensions/savesettings',);
+                    }
+
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/admin/system/menu')) {
+                if (0 === strpos($pathinfo, '/admin/system/menu/item')) {
+                    // @system/item/add
+                    if ($pathinfo === '/admin/system/menu/item/add') {
+                        return array (  '_controller' => 'Pagekit\\Menu\\Controller\\ItemController::addAction',  '_request' =>   array (    'value' =>     array (      'menu' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/menu/item.edit.razr',  ),  '_access' =>   array (    0 => 'system: manage menus',    1 => 'system: access admin area',  ),  '_route' => '@system/item/add',);
+                    }
+
+                    // @system/item/edit
+                    if ($pathinfo === '/admin/system/menu/item/edit') {
+                        return array (  '_controller' => 'Pagekit\\Menu\\Controller\\ItemController::editAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/menu/item.edit.razr',  ),  '_access' =>   array (    0 => 'system: manage menus',    1 => 'system: access admin area',  ),  '_route' => '@system/item/edit',);
+                    }
+
+                    // @system/item/save
+                    if ($pathinfo === '/admin/system/menu/item/save') {
+                        return array (  '_controller' => 'Pagekit\\Menu\\Controller\\ItemController::saveAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',      'item' => 'array',      'menu' => 'int',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage menus',    1 => 'system: access admin area',  ),  '_route' => '@system/item/save',);
+                    }
+
+                    // @system/item/delete
+                    if ($pathinfo === '/admin/system/menu/item/delete') {
+                        return array (  '_controller' => 'Pagekit\\Menu\\Controller\\ItemController::deleteAction',  '_request' =>   array (    'value' =>     array (      'menu' => 'int',      'id' => 'int[]',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage menus',    1 => 'system: access admin area',  ),  '_route' => '@system/item/delete',);
+                    }
+
+                    // @system/item/status
+                    if ($pathinfo === '/admin/system/menu/item/status') {
+                        return array (  '_controller' => 'Pagekit\\Menu\\Controller\\ItemController::statusAction',  '_request' =>   array (    'value' =>     array (      'status' => 'int',      'menu' => 'int',      'id' => 'int[]',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage menus',    1 => 'system: access admin area',  ),  '_route' => '@system/item/status',);
+                    }
+
+                }
+
+                // @system/menu
+                if ($pathinfo === '/admin/system/menu') {
+                    return array (  '_controller' => 'Pagekit\\Menu\\Controller\\MenuController::indexAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/menu/index.razr',  ),  '_access' =>   array (    0 => 'system: manage menus',    1 => 'system: access admin area',  ),  '_route' => '@system/menu',);
+                }
+
+                // @system/menu/save
+                if ($pathinfo === '/admin/system/menu/save') {
+                    return array (  '_controller' => 'Pagekit\\Menu\\Controller\\MenuController::saveAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',      0 => 'name',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage menus',    1 => 'system: access admin area',  ),  '_route' => '@system/menu/save',);
+                }
+
+                // @system/menu/delete
+                if ($pathinfo === '/admin/system/menu/delete') {
+                    return array (  '_controller' => 'Pagekit\\Menu\\Controller\\MenuController::deleteAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage menus',    1 => 'system: access admin area',  ),  '_route' => '@system/menu/delete',);
+                }
+
+                // @system/menu/reorder
+                if ($pathinfo === '/admin/system/menu/reorder') {
+                    return array (  '_controller' => 'Pagekit\\Menu\\Controller\\MenuController::reorderAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',      'order' => 'array',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage menus',    1 => 'system: access admin area',  ),  '_route' => '@system/menu/reorder',);
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/admin/system/alias')) {
+                // @system/alias
+                if ($pathinfo === '/admin/system/alias') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\AliasController::indexAction',  '_request' =>   array (    'value' =>     array (      'filter' => 'array',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/aliases/index.razr',  ),  '_access' =>   array (    0 => 'system: manage url aliases',    1 => 'system: access admin area',  ),  '_route' => '@system/alias',);
+                }
+
+                // @system/alias/add
+                if ($pathinfo === '/admin/system/alias/add') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\AliasController::addAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/aliases/edit.razr',  ),  '_access' =>   array (    0 => 'system: manage url aliases',    1 => 'system: access admin area',  ),  '_route' => '@system/alias/add',);
+                }
+
+                // @system/alias/edit
+                if ($pathinfo === '/admin/system/alias/edit') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\AliasController::editAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/aliases/edit.razr',  ),  '_access' =>   array (    0 => 'system: manage url aliases',    1 => 'system: access admin area',  ),  '_route' => '@system/alias/edit',);
+                }
+
+                // @system/alias/save
+                if ($pathinfo === '/admin/system/alias/save') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\AliasController::saveAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',      0 => 'alias',      1 => 'source',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage url aliases',    1 => 'system: access admin area',  ),  '_route' => '@system/alias/save',);
+                }
+
+                // @system/alias/delete
+                if ($pathinfo === '/admin/system/alias/delete') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\AliasController::deleteAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage url aliases',    1 => 'system: access admin area',  ),  '_route' => '@system/alias/delete',);
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/admin/system/dashboard')) {
+                // @system/dashboard
+                if ($pathinfo === '/admin/system/dashboard') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\DashboardController::indexAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/dashboard/index.razr',  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/dashboard',);
+                }
+
+                // @system/dashboard/settings
+                if ($pathinfo === '/admin/system/dashboard/settings') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\DashboardController::settingsAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/dashboard/settings.razr',  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/dashboard/settings',);
+                }
+
+                // @system/dashboard/add
+                if ($pathinfo === '/admin/system/dashboard/add') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\DashboardController::addAction',  '_request' =>   array (    'value' =>     array (      0 => 'type',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/dashboard/edit.razr',  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/dashboard/add',);
+                }
+
+                // @system/dashboard/edit
+                if ($pathinfo === '/admin/system/dashboard/edit') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\DashboardController::editAction',  '_request' =>   array (    'value' =>     array (      0 => 'id',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/dashboard/edit.razr',  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/dashboard/edit',);
+                }
+
+                // @system/dashboard/save
+                if ($pathinfo === '/admin/system/dashboard/save') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\DashboardController::saveAction',  '_request' =>   array (    'value' =>     array (      0 => 'id',      'widget' => 'array',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/dashboard/save',);
+                }
+
+                // @system/dashboard/delete
+                if ($pathinfo === '/admin/system/dashboard/delete') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\DashboardController::deleteAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'array',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/dashboard/delete',);
+                }
+
+                // @system/dashboard/reorder
+                if ($pathinfo === '/admin/system/dashboard/reorder') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\DashboardController::reorderAction',  '_request' =>   array (    'value' =>     array (      'order' => 'array',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/dashboard/reorder',);
+                }
+
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/system/finder')) {
+            // @system/finder/list
+            if ($pathinfo === '/system/finder/list') {
+                return array (  '_controller' => 'Pagekit\\System\\Controller\\FinderController::listAction',  '_request' =>   array (    'value' =>     array (      0 => 'path',    ),  ),  '_response' =>   array (    'value' => 'json',  ),  '_route' => '@system/finder/list',);
+            }
+
+            // @system/finder/createfolder
+            if ($pathinfo === '/system/finder/createfolder') {
+                return array (  '_controller' => 'Pagekit\\System\\Controller\\FinderController::createFolderAction',  '_request' =>   array (    'value' =>     array (      0 => 'name',    ),  ),  '_response' =>   array (    'value' => 'json',  ),  '_route' => '@system/finder/createfolder',);
+            }
+
+            if (0 === strpos($pathinfo, '/system/finder/re')) {
+                // @system/finder/rename
+                if ($pathinfo === '/system/finder/rename') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\FinderController::renameAction',  '_request' =>   array (    'value' =>     array (      0 => 'oldname',      1 => 'newname',    ),  ),  '_response' =>   array (    'value' => 'json',  ),  '_route' => '@system/finder/rename',);
+                }
+
+                // @system/finder/removefiles
+                if ($pathinfo === '/system/finder/removefiles') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\FinderController::removeFilesAction',  '_request' =>   array (    'value' =>     array (      'names' => 'array',    ),  ),  '_response' =>   array (    'value' => 'json',  ),  '_route' => '@system/finder/removefiles',);
+                }
+
+            }
+
+            // @system/finder/upload
+            if ($pathinfo === '/system/finder/upload') {
+                return array (  '_controller' => 'Pagekit\\System\\Controller\\FinderController::uploadAction',  '_response' =>   array (    'value' => 'json',  ),  '_route' => '@system/finder/upload',);
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/admin/system')) {
+            if (0 === strpos($pathinfo, '/admin/system/link')) {
+                // @system/link
+                if ($pathinfo === '/admin/system/link') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\LinkController::indexAction',  '_request' =>   array (    'value' =>     array (      0 => 'context',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/link/link.types.razr',    'layout' => false,  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/link',);
+                }
+
+                // @system/link/form
+                if ($pathinfo === '/admin/system/link/form') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\LinkController::formAction',  '_request' =>   array (    'value' =>     array (      0 => 'link',      1 => 'context',    ),  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/link/form',);
+                }
+
+                // @system/link/resolve
+                if ($pathinfo === '/admin/system/link/resolve') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\LinkController::resolveAction',  '_request' =>   array (    'value' =>     array (      0 => 'link',      1 => 'context',    ),  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/link/resolve',);
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/admin/system/m')) {
+                // @system/marketplace
+                if ($pathinfo === '/admin/system/marketplace') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\MarketplaceController::indexAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/settings/marketplace.razr',  ),  '_access' =>   array (    0 => 'system: manage extensions',    1 => 'system: access admin area',  ),  '_route' => '@system/marketplace',);
+                }
+
+                if (0 === strpos($pathinfo, '/admin/system/migration')) {
+                    // @system/migration
+                    if ($pathinfo === '/admin/system/migration') {
+                        return array (  '_controller' => 'Pagekit\\System\\Controller\\MigrationController::indexAction',  '_response' =>   array (    'value' => 'extension://system/theme/templates/migration.razr',    'layout' => false,  ),  '_access' =>   array (    0 => 'system: software updates',    1 => 'system: access admin area',  ),  '_route' => '@system/migration',);
+                    }
+
+                    // @system/migration/migrate
+                    if ($pathinfo === '/admin/system/migration/migrate') {
+                        return array (  '_controller' => 'Pagekit\\System\\Controller\\MigrationController::migrateAction',  '_request' =>   array (    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: software updates',    1 => 'system: access admin area',  ),  '_route' => '@system/migration/migrate',);
+                    }
+
+                }
+
+            }
+
+        }
+
+        // @system/oauth/connect
+        if ($pathinfo === '/oauth/connect') {
+            return array (  '_controller' => 'Pagekit\\System\\Controller\\OAuthController::connectAction',  '_route' => '@system/oauth/connect',);
+        }
+
+        if (0 === strpos($pathinfo, '/admin')) {
+            if (0 === strpos($pathinfo, '/admin/system')) {
+                if (0 === strpos($pathinfo, '/admin/system/package')) {
+                    // @system/package/upload
+                    if ($pathinfo === '/admin/system/package/upload') {
+                        return array (  '_controller' => 'Pagekit\\System\\Controller\\PackageController::uploadAction',  '_request' =>   array (    'value' =>     array (      0 => 'type',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage extensions',    1 => 'system: access admin area',  ),  '_route' => '@system/package/upload',);
+                    }
+
+                    // @system/package/install
+                    if ($pathinfo === '/admin/system/package/install') {
+                        return array (  '_controller' => 'Pagekit\\System\\Controller\\PackageController::installAction',  '_request' =>   array (    'value' =>     array (      'package' => 'json',      'path' => 'alnum',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage extensions',    1 => 'system: access admin area',  ),  '_route' => '@system/package/install',);
+                    }
+
+                }
+
+                if (0 === strpos($pathinfo, '/admin/system/settings')) {
+                    // @system/settings
+                    if ($pathinfo === '/admin/system/settings') {
+                        return array (  '_controller' => 'Pagekit\\System\\Controller\\SettingsController::indexAction',  '_request' =>   array (    'value' =>     array (      'tab' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/settings/settings.razr',  ),  '_access' =>   array (    0 => 'system: access settings',    1 => 'system: access admin area',  ),  '_route' => '@system/settings',);
+                    }
+
+                    // @system/settings/save
+                    if ($pathinfo === '/admin/system/settings/save') {
+                        return array (  '_controller' => 'Pagekit\\System\\Controller\\SettingsController::saveAction',  '_request' =>   array (    'value' =>     array (      'config' => 'array',      'option' => 'array',      'tab' => 'int',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: access settings',    1 => 'system: access admin area',  ),  '_route' => '@system/settings/save',);
+                    }
+
+                    if (0 === strpos($pathinfo, '/admin/system/settings/tests')) {
+                        // @system/settings/testsmtpconnection
+                        if ($pathinfo === '/admin/system/settings/testsmtpconnection') {
+                            return array (  '_controller' => 'Pagekit\\System\\Controller\\SettingsController::testSmtpConnectionAction',  '_request' =>   array (    'value' =>     array (      'option' => 'array',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: access settings',    1 => 'system: access admin area',  ),  '_route' => '@system/settings/testsmtpconnection',);
+                        }
+
+                        // @system/settings/testsendemail
+                        if ($pathinfo === '/admin/system/settings/testsendemail') {
+                            return array (  '_controller' => 'Pagekit\\System\\Controller\\SettingsController::testSendEmailAction',  '_request' =>   array (    'value' =>     array (      'option' => 'array',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: access settings',    1 => 'system: access admin area',  ),  '_route' => '@system/settings/testsendemail',);
+                        }
+
+                    }
+
+                }
+
+                // @system/system
+                if ($pathinfo === '/admin/system') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\SystemController::indexAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/settings/index.razr',  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/system',);
+                }
+
+            }
+
+            // @system/system/login
+            if ($pathinfo === '/admin/login') {
+                return array (  '_maintenance' => true,  '_controller' => 'Pagekit\\System\\Controller\\SystemController::loginAction',  '_response' =>   array (    'value' => 'extension://system/theme/templates/login.razr',    'layout' => false,  ),  '_route' => '@system/system/login',);
+            }
+
+            // @system/system/admin
+            if ($pathinfo === '/admin') {
+                return array (  '_controller' => 'Pagekit\\System\\Controller\\SystemController::adminAction',  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/system/admin',);
+            }
+
+            // @system/system/adminmenu
+            if ($pathinfo === '/admin/admin/menu') {
+                return array (  '_controller' => 'Pagekit\\System\\Controller\\SystemController::adminMenuAction',  '_request' =>   array (    'value' =>     array (      'order' => 'array',    ),  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/system/adminmenu',);
+            }
+
+            if (0 === strpos($pathinfo, '/admin/system')) {
+                // @system/system/storage
+                if ($pathinfo === '/admin/system/storage') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\SystemController::storageAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/settings/storage.razr',  ),  '_access' =>   array (    0 => 'system: manage storage',    1 => 'system: access admin area',  ),  '_route' => '@system/system/storage',);
+                }
+
+                // @system/system/info
+                if ($pathinfo === '/admin/system/info') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\SystemController::infoAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/settings/info.razr',  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/system/info',);
+                }
+
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/system')) {
+            // @system/system/locale
+            if ($pathinfo === '/system/locale') {
+                return array (  '_controller' => 'Pagekit\\System\\Controller\\SystemController::localeAction',  '_response' =>   array (    'value' => 'json',  ),  '_route' => '@system/system/locale',);
+            }
+
+            // @system/system/tmpl
+            if (0 === strpos($pathinfo, '/system/tmpl') && preg_match('#^/system/tmpl/(?P<templates>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => '@system/system/tmpl')), array (  '_controller' => 'Pagekit\\System\\Controller\\SystemController::tmplAction',  '_response' =>   array (    'value' => 'json',  ),));
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/admin/system')) {
+            // @system/system/clearcache
+            if ($pathinfo === '/admin/system/clearcache') {
+                return array (  '_controller' => 'Pagekit\\System\\Controller\\SystemController::clearCacheAction',  '_request' =>   array (    'value' =>     array (      'caches' => 'array',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: access admin area',  ),  '_route' => '@system/system/clearcache',);
+            }
+
+            if (0 === strpos($pathinfo, '/admin/system/update')) {
+                // @system/update
+                if ($pathinfo === '/admin/system/update') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\UpdateController::indexAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/settings/update.razr',  ),  '_access' =>   array (    0 => 'system: software updates',    1 => 'system: access admin area',  ),  '_route' => '@system/update',);
+                }
+
+                // @system/update/download
+                if ($pathinfo === '/admin/system/update/download') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\UpdateController::downloadAction',  '_request' =>   array (    'value' =>     array (      'update' => 'json',    ),  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: software updates',    1 => 'system: access admin area',  ),  '_route' => '@system/update/download',);
+                }
+
+                // @system/update/copy
+                if ($pathinfo === '/admin/system/update/copy') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\UpdateController::copyAction',  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: software updates',    1 => 'system: access admin area',  ),  '_route' => '@system/update/copy',);
+                }
+
+                // @system/update/database
+                if ($pathinfo === '/admin/system/update/database') {
+                    return array (  '_controller' => 'Pagekit\\System\\Controller\\UpdateController::databaseAction',  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: software updates',    1 => 'system: access admin area',  ),  '_route' => '@system/update/database',);
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/admin/system/themes')) {
+                // @system/themes
+                if ($pathinfo === '/admin/system/themes') {
+                    return array (  '_controller' => 'Pagekit\\Theme\\Controller\\ThemesController::indexAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/themes/index.razr',  ),  '_access' =>   array (    0 => 'system: manage themes',    1 => 'system: access admin area',  ),  '_route' => '@system/themes',);
+                }
+
+                // @system/themes/enable
+                if ($pathinfo === '/admin/system/themes/enable') {
+                    return array (  '_controller' => 'Pagekit\\Theme\\Controller\\ThemesController::enableAction',  '_request' =>   array (    'value' =>     array (      0 => 'name',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage themes',    1 => 'system: access admin area',  ),  '_route' => '@system/themes/enable',);
+                }
+
+                // @system/themes/uninstall
+                if ($pathinfo === '/admin/system/themes/uninstall') {
+                    return array (  '_controller' => 'Pagekit\\Theme\\Controller\\ThemesController::uninstallAction',  '_request' =>   array (    'value' =>     array (      0 => 'name',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage themes',    1 => 'system: access admin area',  ),  '_route' => '@system/themes/uninstall',);
+                }
+
+                if (0 === strpos($pathinfo, '/admin/system/themes/s')) {
+                    // @system/themes/settings
+                    if ($pathinfo === '/admin/system/themes/settings') {
+                        return array (  '_controller' => 'Pagekit\\Theme\\Controller\\ThemesController::settingsAction',  '_request' =>   array (    'value' =>     array (      0 => 'name',    ),  ),  '_access' =>   array (    0 => 'system: manage themes',    1 => 'system: access admin area',  ),  '_route' => '@system/themes/settings',);
+                    }
+
+                    // @system/themes/savesettings
+                    if ($pathinfo === '/admin/system/themes/savesettings') {
+                        return array (  '_controller' => 'Pagekit\\Theme\\Controller\\ThemesController::saveSettingsAction',  '_request' =>   array (    'value' =>     array (      0 => 'name',      'params' => 'array',    ),  ),  '_access' =>   array (    0 => 'system: manage themes',    1 => 'system: access admin area',  ),  '_route' => '@system/themes/savesettings',);
+                    }
+
+                }
+
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/user')) {
+            if (0 === strpos($pathinfo, '/user/log')) {
+                // @system/auth/login
+                if ($pathinfo === '/user/login') {
+                    return array (  '_maintenance' => true,  '_controller' => 'Pagekit\\User\\Controller\\AuthController::loginAction',  '_request' =>   array (    'value' =>     array (      0 => 'redirect',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/user/login.razr',  ),  '_route' => '@system/auth/login',);
+                }
+
+                // @system/auth/logout
+                if ($pathinfo === '/user/logout') {
+                    return array (  '_maintenance' => true,  '_controller' => 'Pagekit\\User\\Controller\\AuthController::logoutAction',  '_route' => '@system/auth/logout',);
+                }
+
+            }
+
+            // @system/auth/authenticate
+            if ($pathinfo === '/user/authenticate') {
+                return array (  '_maintenance' => true,  '_controller' => 'Pagekit\\User\\Controller\\AuthController::authenticateAction',  '_request' =>   array (    'value' =>     array (      'credentials' => 'array',    ),  ),  '_route' => '@system/auth/authenticate',);
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/admin/system/user/permission')) {
+            // @system/permission
+            if ($pathinfo === '/admin/system/user/permission') {
+                return array (  '_controller' => 'Pagekit\\User\\Controller\\PermissionController::indexAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/user/permission.razr',  ),  '_access' =>   array (    0 => 'system: manage user permissions',    1 => 'system: access admin area',  ),  '_route' => '@system/permission',);
+            }
+
+            // @system/permission/save
+            if ($pathinfo === '/admin/system/user/permission/save') {
+                return array (  '_controller' => 'Pagekit\\User\\Controller\\PermissionController::saveAction',  '_request' =>   array (    'value' =>     array (      'permissions' => 'array',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage user permissions',    1 => 'system: access admin area',  ),  '_route' => '@system/permission/save',);
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/user')) {
+            if (0 === strpos($pathinfo, '/user/profile')) {
+                // @system/profile
+                if ($pathinfo === '/user/profile') {
+                    return array (  '_controller' => 'Pagekit\\User\\Controller\\ProfileController::indexAction',  '_response' =>   array (    'value' => 'extension://system/views/user/profile.razr',  ),  '_route' => '@system/profile',);
+                }
+
+                // @system/profile/save
+                if ($pathinfo === '/user/profile/save') {
+                    return array (  '_controller' => 'Pagekit\\User\\Controller\\ProfileController::saveAction',  '_request' =>   array (    'value' =>     array (      'user' => 'array',    ),    'csrf' => true,  ),  '_route' => '@system/profile/save',);
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/user/registration')) {
+                // @system/registration
+                if ($pathinfo === '/user/registration') {
+                    return array (  '_controller' => 'Pagekit\\User\\Controller\\RegistrationController::indexAction',  '_response' =>   array (    'value' => 'extension://system/views/user/registration.razr',  ),  '_route' => '@system/registration',);
+                }
+
+                // @system/registration/register
+                if ($pathinfo === '/user/registration/register') {
+                    return array (  '_controller' => 'Pagekit\\User\\Controller\\RegistrationController::registerAction',  '_request' =>   array (    'value' =>     array (      'user' => 'array',    ),  ),  '_response' =>   array (    'value' => 'json',  ),  '_route' => '@system/registration/register',);
+                }
+
+                // @system/registration/activate
+                if ($pathinfo === '/user/registration/activate') {
+                    return array (  '_controller' => 'Pagekit\\User\\Controller\\RegistrationController::activateAction',  '_request' =>   array (    'value' =>     array (      0 => 'user',      1 => 'key',    ),  ),  '_route' => '@system/registration/activate',);
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/user/password')) {
+                // @system/resetpassword
+                if ($pathinfo === '/user/password') {
+                    return array (  '_controller' => 'Pagekit\\User\\Controller\\ResetPasswordController::indexAction',  '_response' =>   array (    'value' => 'extension://system/views/user/reset/request.razr',  ),  '_route' => '@system/resetpassword',);
+                }
+
+                // @system/resetpassword/reset
+                if ($pathinfo === '/user/password/reset') {
+                    return array (  '_controller' => 'Pagekit\\User\\Controller\\ResetPasswordController::resetAction',  '_request' =>   array (    'value' =>     array (      0 => 'email',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/user/reset/request.razr',  ),  '_route' => '@system/resetpassword/reset',);
+                }
+
+                // @system/resetpassword/confirm
+                if ($pathinfo === '/user/password/confirm') {
+                    return array (  '_controller' => 'Pagekit\\User\\Controller\\ResetPasswordController::confirmAction',  '_request' =>   array (    'value' =>     array (      0 => 'user',      1 => 'key',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/user/reset/confirm.razr',  ),  '_route' => '@system/resetpassword/confirm',);
+                }
+
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/admin')) {
+            if (0 === strpos($pathinfo, '/admin/system')) {
+                if (0 === strpos($pathinfo, '/admin/system/user')) {
+                    if (0 === strpos($pathinfo, '/admin/system/user/role')) {
+                        // @system/role
+                        if ($pathinfo === '/admin/system/user/role') {
+                            return array (  '_controller' => 'Pagekit\\User\\Controller\\RoleController::indexAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/user/role.razr',  ),  '_access' =>   array (    0 => 'system: manage user permissions',    1 => 'system: access admin area',  ),  '_route' => '@system/role',);
+                        }
+
+                        // @system/role/save
+                        if ($pathinfo === '/admin/system/user/role/save') {
+                            return array (  '_controller' => 'Pagekit\\User\\Controller\\RoleController::saveAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',      0 => 'name',      'permissions' => 'array',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage user permissions',    1 => 'system: access admin area',  ),  '_route' => '@system/role/save',);
+                        }
+
+                        // @system/role/delete
+                        if ($pathinfo === '/admin/system/user/role/delete') {
+                            return array (  '_controller' => 'Pagekit\\User\\Controller\\RoleController::deleteAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage user permissions',    1 => 'system: access admin area',  ),  '_route' => '@system/role/delete',);
+                        }
+
+                        // @system/role/priority
+                        if ($pathinfo === '/admin/system/user/role/priority') {
+                            return array (  '_controller' => 'Pagekit\\User\\Controller\\RoleController::priorityAction',  '_request' =>   array (    'value' =>     array (      'order' => 'array',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage user permissions',    1 => 'system: access admin area',  ),  '_route' => '@system/role/priority',);
+                        }
+
+                    }
+
+                    // @system/user
+                    if ($pathinfo === '/admin/system/user') {
+                        return array (  '_controller' => 'Pagekit\\User\\Controller\\UserController::indexAction',  '_request' =>   array (    'value' =>     array (      'filter' => 'array',      'page' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/user/index.razr',  ),  '_access' =>   array (    0 => 'system: manage users',    1 => 'system: access admin area',  ),  '_route' => '@system/user',);
+                    }
+
+                    // @system/user/add
+                    if ($pathinfo === '/admin/system/user/add') {
+                        return array (  '_controller' => 'Pagekit\\User\\Controller\\UserController::addAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/user/edit.razr',  ),  '_access' =>   array (    0 => 'system: manage users',    1 => 'system: access admin area',  ),  '_route' => '@system/user/add',);
+                    }
+
+                    // @system/user/edit
+                    if ($pathinfo === '/admin/system/user/edit') {
+                        return array (  '_controller' => 'Pagekit\\User\\Controller\\UserController::editAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/user/edit.razr',  ),  '_access' =>   array (    0 => 'system: manage users',    1 => 'system: access admin area',  ),  '_route' => '@system/user/edit',);
+                    }
+
+                    // @system/user/save
+                    if ($pathinfo === '/admin/system/user/save') {
+                        return array (  '_controller' => 'Pagekit\\User\\Controller\\UserController::saveAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',      'user' => 'array',      0 => 'password',      'roles' => 'array',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage users',    1 => 'system: access admin area',  ),  '_route' => '@system/user/save',);
+                    }
+
+                    // @system/user/delete
+                    if ($pathinfo === '/admin/system/user/delete') {
+                        return array (  '_controller' => 'Pagekit\\User\\Controller\\UserController::deleteAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage users',    1 => 'system: access admin area',  ),  '_route' => '@system/user/delete',);
+                    }
+
+                    // @system/user/status
+                    if ($pathinfo === '/admin/system/user/status') {
+                        return array (  '_controller' => 'Pagekit\\User\\Controller\\UserController::statusAction',  '_request' =>   array (    'value' =>     array (      'status' => 'int',      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage users',    1 => 'system: access admin area',  ),  '_route' => '@system/user/status',);
+                    }
+
+                }
+
+                if (0 === strpos($pathinfo, '/admin/system/widgets')) {
+                    // @system/widgets
+                    if ($pathinfo === '/admin/system/widgets') {
+                        return array (  '_controller' => 'Pagekit\\Widget\\Controller\\WidgetsController::indexAction',  '_response' =>   array (    'value' => 'extension://system/views/admin/widgets/index.razr',  ),  '_access' =>   array (    0 => 'system: manage widgets',    1 => 'system: access admin area',  ),  '_route' => '@system/widgets',);
+                    }
+
+                    // @system/widgets/add
+                    if ($pathinfo === '/admin/system/widgets/add') {
+                        return array (  '_controller' => 'Pagekit\\Widget\\Controller\\WidgetsController::addAction',  '_request' =>   array (    'value' =>     array (      0 => 'type',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/widgets/edit.razr',  ),  '_access' =>   array (    0 => 'system: manage widgets',    1 => 'system: access admin area',  ),  '_route' => '@system/widgets/add',);
+                    }
+
+                    // @system/widgets/edit
+                    if ($pathinfo === '/admin/system/widgets/edit') {
+                        return array (  '_controller' => 'Pagekit\\Widget\\Controller\\WidgetsController::editAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://system/views/admin/widgets/edit.razr',  ),  '_access' =>   array (    0 => 'system: manage widgets',    1 => 'system: access admin area',  ),  '_route' => '@system/widgets/edit',);
+                    }
+
+                    // @system/widgets/save
+                    if ($pathinfo === '/admin/system/widgets/save') {
+                        return array (  '_controller' => 'Pagekit\\Widget\\Controller\\WidgetsController::saveAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',      'widget' => 'array',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage widgets',    1 => 'system: access admin area',  ),  '_route' => '@system/widgets/save',);
+                    }
+
+                    // @system/widgets/delete
+                    if ($pathinfo === '/admin/system/widgets/delete') {
+                        return array (  '_controller' => 'Pagekit\\Widget\\Controller\\WidgetsController::deleteAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage widgets',    1 => 'system: access admin area',  ),  '_route' => '@system/widgets/delete',);
+                    }
+
+                    // @system/widgets/copy
+                    if ($pathinfo === '/admin/system/widgets/copy') {
+                        return array (  '_controller' => 'Pagekit\\Widget\\Controller\\WidgetsController::copyAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage widgets',    1 => 'system: access admin area',  ),  '_route' => '@system/widgets/copy',);
+                    }
+
+                    // @system/widgets/enable
+                    if ($pathinfo === '/admin/system/widgets/enable') {
+                        return array (  '_controller' => 'Pagekit\\Widget\\Controller\\WidgetsController::enableAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage widgets',    1 => 'system: access admin area',  ),  '_route' => '@system/widgets/enable',);
+                    }
+
+                    // @system/widgets/disable
+                    if ($pathinfo === '/admin/system/widgets/disable') {
+                        return array (  '_controller' => 'Pagekit\\Widget\\Controller\\WidgetsController::disableAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'system: manage widgets',    1 => 'system: access admin area',  ),  '_route' => '@system/widgets/disable',);
+                    }
+
+                    // @system/widgets/reorder
+                    if ($pathinfo === '/admin/system/widgets/reorder') {
+                        return array (  '_controller' => 'Pagekit\\Widget\\Controller\\WidgetsController::reorderAction',  '_request' =>   array (    'value' =>     array (      0 => 'position',      'order' => 'array',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'system: manage widgets',    1 => 'system: access admin area',  ),  '_route' => '@system/widgets/reorder',);
+                    }
+
+                }
+
+            }
+
+            if (0 === strpos($pathinfo, '/admin/blog')) {
+                if (0 === strpos($pathinfo, '/admin/blog/comment')) {
+                    // @blog/comment
+                    if ($pathinfo === '/admin/blog/comment') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\CommentController::indexAction',  '_request' =>   array (    'value' =>     array (      'filter' => 'array',      'post' => 'int',      'page' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://blog/views/admin/comment/index.razr',  ),  '_access' =>   array (    0 => 'blog: manage comments',    1 => 'system: access admin area',  ),  '_route' => '@blog/comment',);
+                    }
+
+                    // @blog/comment/edit
+                    if ($pathinfo === '/admin/blog/comment/edit') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\CommentController::editAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://blog/views/admin/comment/edit.razr',    'layout' => false,  ),  '_access' =>   array (    0 => 'blog: manage comments',    1 => 'system: access admin area',  ),  '_route' => '@blog/comment/edit',);
+                    }
+
+                    // @blog/comment/save
+                    if ($pathinfo === '/admin/blog/comment/save') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\CommentController::saveAction',  '_request' =>   array (    'value' =>     array (      'comment' => 'array',      'id' => 'int',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'blog: manage comments',    1 => 'system: access admin area',  ),  '_route' => '@blog/comment/save',);
+                    }
+
+                    // @blog/comment/delete
+                    if ($pathinfo === '/admin/blog/comment/delete') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\CommentController::deleteAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'blog: manage comments',    1 => 'system: access admin area',  ),  '_route' => '@blog/comment/delete',);
+                    }
+
+                    // @blog/comment/status
+                    if ($pathinfo === '/admin/blog/comment/status') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\CommentController::statusAction',  '_request' =>   array (    'value' =>     array (      'status' => 'int',      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'blog: manage comments',    1 => 'system: access admin area',  ),  '_route' => '@blog/comment/status',);
+                    }
+
+                }
+
+                if (0 === strpos($pathinfo, '/admin/blog/post')) {
+                    // @blog/post
+                    if ($pathinfo === '/admin/blog/post') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\PostController::indexAction',  '_request' =>   array (    'value' =>     array (      'filter' => 'array',      'page' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://blog/views/admin/post/index.razr',  ),  '_access' =>   array (    0 => 'blog: manage content',    1 => 'system: access admin area',  ),  '_route' => '@blog/post',);
+                    }
+
+                    // @blog/post/add
+                    if ($pathinfo === '/admin/blog/post/add') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\PostController::addAction',  '_response' =>   array (    'value' => 'extension://blog/views/admin/post/edit.razr',  ),  '_access' =>   array (    0 => 'blog: manage content',    1 => 'system: access admin area',  ),  '_route' => '@blog/post/add',);
+                    }
+
+                    // @blog/post/edit
+                    if ($pathinfo === '/admin/blog/post/edit') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\PostController::editAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://blog/views/admin/post/edit.razr',  ),  '_access' =>   array (    0 => 'blog: manage content',    1 => 'system: access admin area',  ),  '_route' => '@blog/post/edit',);
+                    }
+
+                    // @blog/post/save
+                    if ($pathinfo === '/admin/blog/post/save') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\PostController::saveAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',      'post' => 'array',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'blog: manage content',    1 => 'system: access admin area',  ),  '_route' => '@blog/post/save',);
+                    }
+
+                    // @blog/post/delete
+                    if ($pathinfo === '/admin/blog/post/delete') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\PostController::deleteAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'blog: manage content',    1 => 'system: access admin area',  ),  '_route' => '@blog/post/delete',);
+                    }
+
+                    // @blog/post/copy
+                    if ($pathinfo === '/admin/blog/post/copy') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\PostController::copyAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'blog: manage content',    1 => 'system: access admin area',  ),  '_route' => '@blog/post/copy',);
+                    }
+
+                    // @blog/post/status
+                    if ($pathinfo === '/admin/blog/post/status') {
+                        return array (  '_controller' => 'Pagekit\\Blog\\Controller\\PostController::statusAction',  '_request' =>   array (    'value' =>     array (      'status' => 'int',      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'blog: manage content',    1 => 'system: access admin area',  ),  '_route' => '@blog/post/status',);
+                    }
+
+                }
+
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/blog')) {
+            // @blog/page
+            if (0 === strpos($pathinfo, '/blog/page') && preg_match('#^/blog/page/(?P<page>\\d+)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => '@blog/page')), array (  '_controller' => 'Pagekit\\Blog\\Controller\\SiteController::indexAction',  '_response' =>   array (    'value' => 'extension://blog/views/post/index.razr',  ),));
+            }
+
+            // @blog/site
+            if ($pathinfo === '/blog') {
+                return array (  '_controller' => 'Pagekit\\Blog\\Controller\\SiteController::indexAction',  '_response' =>   array (    'value' => 'extension://blog/views/post/index.razr',  ),  '_route' => '@blog/site',);
+            }
+
+            // @blog/site/comment
+            if ($pathinfo === '/blog/comment') {
+                return array (  '_controller' => 'Pagekit\\Blog\\Controller\\SiteController::commentAction',  '_request' =>   array (    'value' =>     array (      'post_id' => 'int',      'comment' => 'array',    ),    'csrf' => true,  ),  '_route' => '@blog/site/comment',);
+            }
+
+            // @blog/id
+            if (preg_match('#^/blog/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => '@blog/id')), array (  '_controller' => 'Pagekit\\Blog\\Controller\\SiteController::postAction',  '_response' =>   array (    'value' => 'extension://blog/views/post/post.razr',  ),));
+            }
+
+            if (0 === strpos($pathinfo, '/blog/feed')) {
+                // @blog/site/feed
+                if ($pathinfo === '/blog/feed') {
+                    return array (  '_controller' => 'Pagekit\\Blog\\Controller\\SiteController::feedAction',  '_route' => '@blog/site/feed',);
+                }
+
+                // @blog/site/feed_1
+                if (preg_match('#^/blog/feed/(?P<type>[^/]++)$#s', $pathinfo, $matches)) {
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => '@blog/site/feed_1')), array (  '_controller' => 'Pagekit\\Blog\\Controller\\SiteController::feedAction',));
+                }
+
+            }
+
+        }
+
+        if (0 === strpos($pathinfo, '/admin/page')) {
+            // @page/page
+            if ($pathinfo === '/admin/page') {
+                return array (  '_controller' => 'Pagekit\\Page\\Controller\\PageController::indexAction',  '_request' =>   array (    'value' =>     array (      'filter' => 'array',      'page' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://page/views/admin/pages/index.razr',  ),  '_access' =>   array (    0 => 'page: manage pages',    1 => 'system: access admin area',  ),  '_route' => '@page/page',);
+            }
+
+            // @page/page/add
+            if ($pathinfo === '/admin/page/add') {
+                return array (  '_controller' => 'Pagekit\\Page\\Controller\\PageController::addAction',  '_response' =>   array (    'value' => 'extension://page/views/admin/pages/edit.razr',  ),  '_access' =>   array (    0 => 'page: manage pages',    1 => 'system: access admin area',  ),  '_route' => '@page/page/add',);
+            }
+
+            // @page/page/edit
+            if ($pathinfo === '/admin/page/edit') {
+                return array (  '_controller' => 'Pagekit\\Page\\Controller\\PageController::editAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',    ),  ),  '_response' =>   array (    'value' => 'extension://page/views/admin/pages/edit.razr',  ),  '_access' =>   array (    0 => 'page: manage pages',    1 => 'system: access admin area',  ),  '_route' => '@page/page/edit',);
+            }
+
+            // @page/page/save
+            if ($pathinfo === '/admin/page/save') {
+                return array (  '_controller' => 'Pagekit\\Page\\Controller\\PageController::saveAction',  '_request' =>   array (    'value' =>     array (      'id' => 'int',      'page' => 'array',    ),    'csrf' => true,  ),  '_access' =>   array (    0 => 'page: manage pages',    1 => 'system: access admin area',  ),  '_route' => '@page/page/save',);
+            }
+
+            // @page/page/delete
+            if ($pathinfo === '/admin/page/delete') {
+                return array (  '_controller' => 'Pagekit\\Page\\Controller\\PageController::deleteAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'page: manage pages',    1 => 'system: access admin area',  ),  '_route' => '@page/page/delete',);
+            }
+
+            // @page/page/copy
+            if ($pathinfo === '/admin/page/copy') {
+                return array (  '_controller' => 'Pagekit\\Page\\Controller\\PageController::copyAction',  '_request' =>   array (    'value' =>     array (      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'page: manage pages',    1 => 'system: access admin area',  ),  '_route' => '@page/page/copy',);
+            }
+
+            // @page/page/status
+            if ($pathinfo === '/admin/page/status') {
+                return array (  '_controller' => 'Pagekit\\Page\\Controller\\PageController::statusAction',  '_request' =>   array (    'value' =>     array (      'status' => 'int',      'ids' => 'int[]',    ),    'csrf' => true,  ),  '_response' =>   array (    'value' => 'json',  ),  '_access' =>   array (    0 => 'page: manage pages',    1 => 'system: access admin area',  ),  '_route' => '@page/page/status',);
+            }
+
+        }
+
+        // @page/id
+        if (0 === strpos($pathinfo, '/page') && preg_match('#^/page/(?P<id>\\d+)$#s', $pathinfo, $matches)) {
+            return $this->mergeDefaults(array_replace($matches, array('_route' => '@page/id')), array (  '_controller' => 'Pagekit\\Page\\Controller\\SiteController::indexAction',  '_response' =>   array (    'value' => 'extension://page/views/index.razr',  ),));
+        }
+
+        // @page/id?id=2
+        if ($pathinfo === '/modules') {
+            return array (  '_controller' => 'Pagekit\\Page\\Controller\\SiteController::indexAction',  '_response' =>   array (    'value' => 'extension://page/views/index.razr',  ),  'id' => '2',  '_variables' =>   array (    0 => 'id',  ),  '_route' => '@page/id?id=2',);
+        }
+
+        // @page/id?id=3
+        if ($pathinfo === '/') {
+            return array (  '_controller' => 'Pagekit\\Page\\Controller\\SiteController::indexAction',  '_response' =>   array (    'value' => 'extension://page/views/index.razr',  ),  'id' => '3',  '_variables' =>   array (    0 => 'id',  ),  '_route' => '@page/id?id=3',);
+        }
+
+        // @page/id?id=1
+        if ($pathinfo === '/') {
+            return array (  '_controller' => 'Pagekit\\Page\\Controller\\SiteController::indexAction',  '_response' =>   array (    'value' => 'extension://page/views/index.razr',  ),  'id' => '1',  '_variables' =>   array (    0 => 'id',  ),  '_route' => '@page/id?id=1',);
+        }
+
+        throw 0 < count($allow) ? new MethodNotAllowedException(array_unique($allow)) : new ResourceNotFoundException();
+    }
+}

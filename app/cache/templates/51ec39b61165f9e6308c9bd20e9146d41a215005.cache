@@ -1,0 +1,11 @@
+<?php /* C:\xampp\htdocs\cms\extensions/system/views/messages/messages.razr */ extract(array (  'app' => NULL,  'level' => NULL,  'message' => NULL,), EXTR_SKIP) ?><?php if($this->getAttribute($this->getAttribute($app, 'message'), 'peekAll')) :?>
+<div class="pk-system-messages">
+    <?php foreach($this->getAttribute($this->getAttribute($app, 'message'), 'levels') as $level) :?>
+        <?php if($this->getAttribute($this->getAttribute($app, 'message'), 'has', array($level), 'method')) :?>
+            <?php foreach($this->getAttribute($this->getAttribute($app, 'message'), 'get', array($level), 'method') as $message) :?>
+                <div class="uk-alert uk-alert-<?php echo $this->escape(($level == 'error' ? 'danger' : $level) ) ?>" data-status="<?php echo $this->escape(($level == 'error' ? 'danger' : $level) ) ?>"><?php echo $this->escape(($message) ) ?></div>
+            <?php endforeach ?>
+        <?php endif ?>
+    <?php endforeach ?>
+</div>
+<?php endif ?>

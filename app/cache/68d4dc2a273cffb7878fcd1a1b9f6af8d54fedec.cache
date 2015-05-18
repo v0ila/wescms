@@ -1,0 +1,8 @@
+<?php return array (
+  'lifetime' => 0,
+  'data' => 
+  array (
+    '/modules' => '@page/id?id=2',
+    '/' => '@page/id?id=3',
+  ),
+);

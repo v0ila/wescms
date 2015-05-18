@@ -1,0 +1,18 @@
+{
+    "name": "pagekit/package",
+    "homepage": "http://pagekit.com",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4.0",
+        "pagekit/file": "1.*",
+        "guzzlehttp/guzzle": "4.*"
+    },
+    "autoload": {
+        "psr-4": { "Pagekit\\Component\\Package\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.9-dev"
+        }
+    }
+}

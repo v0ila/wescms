@@ -1,0 +1,115 @@
+<?php return array (
+  'lifetime' => 0,
+  'data' => 
+  array (
+    'class' => 'Pagekit\\User\\Entity\\User',
+    'eventPrefix' => 'system.user',
+    'events' => 
+    array (
+      'postSave' => 
+      array (
+        0 => 'postSave',
+      ),
+      'postDelete' => 
+      array (
+        0 => 'postDelete',
+      ),
+    ),
+    'fields' => 
+    array (
+      'id' => 
+      array (
+        'name' => 'id',
+        'type' => 'integer',
+        'id' => true,
+        'column' => 'id',
+      ),
+      'username' => 
+      array (
+        'name' => 'username',
+        'type' => 'string',
+        'column' => 'username',
+      ),
+      'password' => 
+      array (
+        'name' => 'password',
+        'type' => 'string',
+        'column' => 'password',
+      ),
+      'email' => 
+      array (
+        'name' => 'email',
+        'type' => 'string',
+        'column' => 'email',
+      ),
+      'url' => 
+      array (
+        'name' => 'url',
+        'type' => 'string',
+        'column' => 'url',
+      ),
+      'registered' => 
+      array (
+        'name' => 'registered',
+        'type' => 'datetime',
+        'column' => 'registered',
+      ),
+      'status' => 
+      array (
+        'name' => 'status',
+        'type' => 'integer',
+        'column' => 'status',
+      ),
+      'name' => 
+      array (
+        'name' => 'name',
+        'type' => 'string',
+        'column' => 'name',
+      ),
+      'access' => 
+      array (
+        'name' => 'access',
+        'type' => 'datetime',
+        'column' => 'access',
+      ),
+      'login' => 
+      array (
+        'name' => 'login',
+        'type' => 'datetime',
+        'column' => 'login',
+      ),
+      'activation' => 
+      array (
+        'name' => 'activation',
+        'type' => 'string',
+        'column' => 'activation',
+      ),
+      'data' => 
+      array (
+        'name' => 'data',
+        'type' => 'json_array',
+        'column' => 'data',
+      ),
+    ),
+    'isMappedSuperclass' => false,
+    'relations' => 
+    array (
+      'roles' => 
+      array (
+        'name' => 'roles',
+        'type' => 'ManyToMany',
+        'targetEntity' => 'Pagekit\\User\\Entity\\Role',
+        'keyFrom' => 'id',
+        'keyTo' => 'id',
+        'keyThroughFrom' => 'user_id',
+        'tableThrough' => '@system_user_role',
+        'keyThroughTo' => 'role_id',
+        'orderBy' => 
+        array (
+        ),
+      ),
+    ),
+    'repositoryClass' => 'Pagekit\\User\\Entity\\UserRepository',
+    'table' => '@system_user',
+  ),
+);
